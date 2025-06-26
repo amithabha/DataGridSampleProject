@@ -80,6 +80,14 @@ namespace DataGridSampleProject
             {
                 ErrorAssigner(textBoxes[i], errorProviders[i], TextBoxtitles[i]); 
             }
+
+            // Assigning error for non-integer WorkExperience text.  
+            if(!IsEmptyOrNullOrWhiteSpace(txtWorkExperience) && !int.TryParse(txtWorkExperience.Text, out _))
+            {
+                errorWorkExperience.SetError(txtWorkExperience, $"Work Experience should be integer");
+            }
+
+            // FIXME: Check whether email entered is in correct format. 
         }
 
         /// <summary>
