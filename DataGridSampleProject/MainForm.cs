@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DataGridSampleProject;
 
 namespace DataGridSampleProject
 {
     public partial class MainForm : Form
     {
+
+        private static readonly string _xmlfile = "employees.txt"; 
 
         public MainForm()
         {
@@ -19,12 +22,18 @@ namespace DataGridSampleProject
             InitializeComponent();
         }
 
+        public void LoadData()
+        {
+            List<Employee> employeeList = Utils.LoadEmployees(_xmlfile);
+            dgvEmployees.DataSource = employeeList; 
+        }
+
         private void addButton_Click(object sender, EventArgs e)
         {
 
             DetailsForm detailsForm = new DetailsForm();
             detailsForm.Show();
-            this.Hide(); 
+            this.Hide();
         }
     }
 }

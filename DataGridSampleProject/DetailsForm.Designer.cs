@@ -139,51 +139,51 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(325, 55);
+            this.txtName.Location = new System.Drawing.Point(323, 55);
             this.txtName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(240, 26);
+            this.txtName.Size = new System.Drawing.Size(241, 26);
             this.txtName.TabIndex = 7;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(326, 147);
+            this.txtEmail.Location = new System.Drawing.Point(323, 147);
             this.txtEmail.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(240, 26);
+            this.txtEmail.Size = new System.Drawing.Size(241, 26);
             this.txtEmail.TabIndex = 9;
             // 
             // txtReporter
             // 
-            this.txtReporter.Location = new System.Drawing.Point(326, 192);
+            this.txtReporter.Location = new System.Drawing.Point(323, 192);
             this.txtReporter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtReporter.Name = "txtReporter";
-            this.txtReporter.Size = new System.Drawing.Size(240, 26);
+            this.txtReporter.Size = new System.Drawing.Size(241, 26);
             this.txtReporter.TabIndex = 10;
             // 
             // txtReportee
             // 
-            this.txtReportee.Location = new System.Drawing.Point(324, 239);
+            this.txtReportee.Location = new System.Drawing.Point(323, 239);
             this.txtReportee.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtReportee.Name = "txtReportee";
-            this.txtReportee.Size = new System.Drawing.Size(240, 26);
+            this.txtReportee.Size = new System.Drawing.Size(241, 26);
             this.txtReportee.TabIndex = 11;
             // 
             // txtProductLineResponsibility
             // 
-            this.txtProductLineResponsibility.Location = new System.Drawing.Point(324, 285);
+            this.txtProductLineResponsibility.Location = new System.Drawing.Point(323, 285);
             this.txtProductLineResponsibility.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtProductLineResponsibility.Name = "txtProductLineResponsibility";
-            this.txtProductLineResponsibility.Size = new System.Drawing.Size(240, 26);
+            this.txtProductLineResponsibility.Size = new System.Drawing.Size(241, 26);
             this.txtProductLineResponsibility.TabIndex = 12;
             // 
             // txtWorkExperience
             // 
-            this.txtWorkExperience.Location = new System.Drawing.Point(324, 338);
+            this.txtWorkExperience.Location = new System.Drawing.Point(323, 338);
             this.txtWorkExperience.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtWorkExperience.Name = "txtWorkExperience";
-            this.txtWorkExperience.Size = new System.Drawing.Size(240, 26);
+            this.txtWorkExperience.Size = new System.Drawing.Size(241, 26);
             this.txtWorkExperience.TabIndex = 13;
             // 
             // panel1
@@ -219,7 +219,7 @@
             "Lead Engineer",
             "Principal Engineer",
             "Chief Engineer"});
-            this.comboxDesignation.Location = new System.Drawing.Point(325, 101);
+            this.comboxDesignation.Location = new System.Drawing.Point(323, 101);
             this.comboxDesignation.Name = "comboxDesignation";
             this.comboxDesignation.Size = new System.Drawing.Size(241, 28);
             this.comboxDesignation.TabIndex = 3;
@@ -299,10 +299,10 @@
             // 
             // txtId
             // 
-            this.txtId.Location = new System.Drawing.Point(324, 5);
+            this.txtId.Location = new System.Drawing.Point(323, 5);
             this.txtId.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtId.Name = "txtId";
-            this.txtId.Size = new System.Drawing.Size(240, 26);
+            this.txtId.Size = new System.Drawing.Size(241, 26);
             this.txtId.TabIndex = 15;
             // 
             // DetailsForm
