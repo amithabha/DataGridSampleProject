@@ -10,31 +10,21 @@ using System.Windows.Forms;
 
 namespace DataGridSampleProject
 {
-    public partial class Form2 : Form
+    public partial class DetailsForm : Form
     {
-        public Form2()
+        public DetailsForm()
         {
+
             InitializeComponent();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-        private void Form2_Load(object sender, EventArgs e)
-        {
-
-        }
-        private void label8_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void nameTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-    
         private void submit_Click(object sender, EventArgs e)
+        {
+
+            ErrorHandler(); 
+        }
+
+        private void ErrorHandler()
         {
 
             // ErrorProvider list
@@ -47,7 +37,7 @@ namespace DataGridSampleProject
             // TextBox list
             List<TextBox> textBoxes = new List<TextBox>
             {
-                txtName, txtEmail, txtReporter, txtReportee, 
+                txtName, txtEmail, txtReporter, txtReportee,
                 txtProductLineResponsibility, txtWorkExperience
             };
 
@@ -78,11 +68,11 @@ namespace DataGridSampleProject
             // Setting error for empty TextBoxes
             for (int i = 0; i < textBoxes.Count; i++)
             {
-                ErrorAssigner(textBoxes[i], errorProviders[i], TextBoxtitles[i]); 
+                ErrorAssigner(textBoxes[i], errorProviders[i], TextBoxtitles[i]);
             }
 
             // Assigning error for non-integer WorkExperience text.  
-            if(!IsEmptyOrNullOrWhiteSpace(txtWorkExperience) && !int.TryParse(txtWorkExperience.Text, out _))
+            if (!IsEmptyOrNullOrWhiteSpace(txtWorkExperience) && !int.TryParse(txtWorkExperience.Text, out _))
             {
                 errorWorkExperience.SetError(txtWorkExperience, $"Work Experience should be integer");
             }
@@ -158,6 +148,11 @@ namespace DataGridSampleProject
             {
                 errorProvider.Clear();
             }
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

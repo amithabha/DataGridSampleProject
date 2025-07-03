@@ -1,6 +1,6 @@
 ﻿namespace DataGridSampleProject
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -62,13 +62,12 @@
             this.reporteeCol,
             this.prodLineRespCol,
             this.workExp});
-            this.dgvEmployees.Location = new System.Drawing.Point(3, 99);
+            this.dgvEmployees.Location = new System.Drawing.Point(42, 108);
             this.dgvEmployees.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvEmployees.Name = "dgvEmployees";
             this.dgvEmployees.ReadOnly = true;
-            this.dgvEmployees.Size = new System.Drawing.Size(745, 231);
+            this.dgvEmployees.Size = new System.Drawing.Size(1072, 231);
             this.dgvEmployees.TabIndex = 0;
-            this.dgvEmployees.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // nameCol
             // 
@@ -160,7 +159,6 @@
             this.btnRemove.Size = new System.Drawing.Size(162, 48);
             this.btnRemove.TabIndex = 3;
             this.btnRemove.UseVisualStyleBackColor = false;
-            this.btnRemove.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
@@ -194,7 +192,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(714, 71);
             this.panel1.TabIndex = 7;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // label3
             // 
@@ -207,7 +204,7 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Employee Database: SEDEMAC SW Division";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -223,9 +220,8 @@
             this.Controls.Add(this.dgvEmployees);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Name = "MainForm";
+            this.Text = "Employee Database: SEDEMAC Software Division";
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployees)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

@@ -2,10 +2,10 @@ C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\bin
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\bin\Debug\DataGridSampleProject.exe
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\bin\Debug\DataGridSampleProject.pdb
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.csprojAssemblyReference.cache
-C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.Form2.resources
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.Properties.Resources.resources
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.csproj.GenerateResource.cache
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.csproj.CoreCompileInputs.cache
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.exe
 C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.pdb
-C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.Form1.resources
+C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.MainForm.resources
+C:\Users\amithabh.a\source\repos\DataGridSampleProject\DataGridSampleProject\obj\Debug\DataGridSampleProject.DetailsForm.resources
