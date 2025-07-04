@@ -10,32 +10,42 @@
 * Description = Implement Utility functions
 *****************************************************************************/
 using System;
-using System.IO; 
+using System.IO;
+using System.Linq;
 using System.Diagnostics; 
 using System.Xml.Serialization;
-using System.Text.RegularExpressions; 
+using System.Collections.Generic; 
+using System.Text.RegularExpressions;
 
 namespace DataGridSampleProject
 {
     public class Utils
     {
-        private static readonly string _xmlfile = "employees.xml";
 
-        public static List<Employee> LoadEmployees(string filePath)
+        public static List<Employee>? LoadEmployees(string filePath)
         {
             // if string does not end with .xml
             if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
             {
 
-                throw new ArgumentException($"Invalid Argument for variable {nameof(filePath)}");
+                Trace.WriteLine($"[Utils] LoadEmployees(): {filePath} is not an xml filepath. "); 
+                return null; 
+            }
+
+            // If filePath is invalid, return null
+            if (!File.Exists(filePath))
+            {
+
+                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} variable content is invalid. {filePath} does not exists. "); 
+                return null; 
             }
 
             string serializedXmlString = ReadFromFile(filePath);
 
-            // If content is empty, return empty list
+            // If content is empty, create an empty file and return empty list
             if (String.IsNullOrEmpty(serializedXmlString))
             {
-                return new List<Employee>(); 
+                return new List<Employee>();
             }
 
 
@@ -44,9 +54,10 @@ namespace DataGridSampleProject
             {
                 return DeserializeFromXml<List<Employee>>(ReadFromFile(serializedXmlString));
             }
-            catch (Exception ex)
+            catch 
             {
-                throw new InvalidDataException($"File {nameof(filePath)} contains invalid data and cannot be deserialized; {ex.message}"); 
+                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} contains invalid data to process and unable to deserialize into {nameof(List<Employee>)}. "); 
+                return null; 
             }
         }
 
@@ -57,38 +68,71 @@ namespace DataGridSampleProject
             WriteToFile(serializedXmlString, filePath);
         }
 
-        public static List<Employee> AddPerson(Employee employee, string filePath)
+        public static List<Employee>? AddEmployee(Employee employee, string filePath)
         {
 
-            List<Employee> employeeList = LoadEmployees(filePath);  
+            List<Employee>? employeeList = LoadEmployees(filePath);
 
-            employeeList.Add(employee);
-            SaveEmployees(employeeList, filePath);
-
-            return employeeList; 
-        }
-
-        public static List<Employee> EditEmployee(Employee updatedEmployee, string filePath)
-        {
-
-            List<Employee> employeeList = LoadEmployees(filePath); 
-
-            Employee employee = employeeList.FirstOrDefault(u => u.Id == updatedEmployee.Id);
-
-            if (employee != null)
+            if (employeeList == null)
             {
 
-                employee.Name = updatedEmployee.Name;
-                employee.Designation = updatedEmployee.Designation;
-                employee.EmailId = updatedEmployee.EmailId;
-                employee.Reporter = updatedEmployee.Reporter;
-                employee.Reportee = updatedEmployee.Reportee;
-                employee.ProductLineResponsibility = updatedEmployee.ProductLineResponsibility;
+                Trace.WriteLine($"[Utils] AddEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
+                return null; 
             }
+            else
+            {
 
-            SaveEmployees(employeeList, filePath);
+                employeeList.Add(employee);
+                SaveEmployees(employeeList, filePath);
 
-            return employeeList; 
+                return employeeList;
+            }
+        }
+
+        public static List<Employee>? EditEmployee(Employee updatedEmployee, string filePath)
+        {
+
+            List<Employee>? employeeList = LoadEmployees(filePath);
+
+            if (employeeList == null)
+            {
+
+                Trace.WriteLine($"[Utils] EditEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
+                return null;
+            }
+            else if (employeeList.Count == 0)
+            {
+
+                Trace.WriteLine($"[Utils] EditEmployee(); Unexpected behaviour: {nameof(employeeList)} of type {nameof(List<Employee>)}does not contain any employee record to edit. ");
+                return null; 
+            }
+            else
+            {
+
+                Employee employee = employeeList.FirstOrDefault(u => u.Id == updatedEmployee.Id);
+
+                if (employee == null)
+                {
+                    Trace.WriteLine($"[Utils] EditEmployee(); {nameof(updatedEmployee)} does not exist in employeeList. ");
+                    return null; 
+                }
+                else
+                {
+
+                    // Updating the employee information 
+                    employee.Name = updatedEmployee.Name;
+                    employee.Designation = updatedEmployee.Designation;
+                    employee.EmailId = updatedEmployee.EmailId;
+                    employee.Reporter = updatedEmployee.Reporter;
+                    employee.Reportee = updatedEmployee.Reportee;
+                    employee.ProductLineResponsibility = updatedEmployee.ProductLineResponsibility;
+
+                    // Saving the data back to xml file
+                    SaveEmployees(employeeList, filePath);
+
+                    return employeeList;
+                }
+            }
         }
 
         /// <summary>
@@ -100,12 +144,12 @@ namespace DataGridSampleProject
         public static List<Employee> DeleteEmployee(string filePath, int id)
         {
 
-            List<Employee> employeeList = LoadEmployees(filePath); 
+            List<Employee> employeeList = LoadEmployees(filePath);
 
-            employeeList.RemoveAll(u => u.Id == id); 
+            employeeList.RemoveAll(u => u.Id == id);
             SaveEmployees(employeeList, filePath);
 
-            return employeeList; 
+            return employeeList;
         }
 
 
@@ -157,8 +201,17 @@ namespace DataGridSampleProject
             using (StringReader stringReader = new StringReader(serializedXmlString))
             {
 
-                T obj = (T)serializer.Deserialize(stringReader) ?? throw new InvalidDataException("[Utils] [DeserializeFromXml] Invalid input data");
-                return obj;
+                try
+                {
+
+                    T obj = (T)serializer.Deserialize(stringReader);
+                    return obj;
+                }
+                catch 
+                {
+
+                    throw new InvalidDataException("[Utils] [DeserializeFromXml] Invalid input data");
+                }
             }
         }
 
@@ -169,7 +222,15 @@ namespace DataGridSampleProject
         /// <returns>File content in String</returns>
         public static string ReadFromFile(string filePath)
         {
-            return File.ReadAllText(filePath);
+
+            if (File.exists(filePath))
+            {
+                return File.ReadAllText(filePath); 
+            }
+            else
+            {
+                throw FileNotFoundException(nameof(filePath), "File does not exist in the path. "); 
+            }
         }
 
         /// <summary>
@@ -180,7 +241,7 @@ namespace DataGridSampleProject
         /// <returns></returns>
         public static void WriteToFile(string content, string filePath)
         {
-            File.WriteAllText(filePath, content); 
+            File.WriteAllText(filePath, content);
         }
 
     }

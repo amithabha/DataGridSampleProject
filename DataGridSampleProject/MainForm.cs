@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,12 +20,25 @@ namespace DataGridSampleProject
         {
 
             InitializeComponent();
+            LoadData(); 
         }
 
         public void LoadData()
         {
+
             List<Employee> employeeList = Utils.LoadEmployees(_xmlfile);
-            dgvEmployees.DataSource = employeeList; 
+
+            // If employeeList is empty list, create a file in filepath 
+            if (employeeList.Count == 0)
+            {
+
+                Utils.SaveEmployees(employeeList, _xmlfile);
+            }
+            else
+            {
+                dgvEmployees.DataSource = employeeList;
+            }
+
         }
 
         private void addButton_Click(object sender, EventArgs e)

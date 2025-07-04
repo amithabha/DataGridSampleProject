@@ -1,6 +1,5 @@
 namespace DataGridSampleProject
 {
-    [Serializable]
     public class Employee
     {
         public int Id;
