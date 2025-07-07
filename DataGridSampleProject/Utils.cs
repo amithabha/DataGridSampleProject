@@ -22,22 +22,28 @@ namespace DataGridSampleProject
     public class Utils
     {
 
+
+        /// <summary>
+        /// Load Employee list from storage xml file. 
+        /// </summary>
+        /// <param name="filePath">Path of xml file</param>
+        /// <returns>List of Employees</returns>
         public static List<Employee>? LoadEmployees(string filePath)
         {
             // if string does not end with .xml
             if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
             {
 
-                Trace.WriteLine($"[Utils] LoadEmployees(): {filePath} is not an xml filepath. "); 
-                return null; 
+                Trace.WriteLine($"[Utils] LoadEmployees(): {filePath} is not an xml filepath. ");
+                return null;
             }
 
             // If filePath is invalid, return null
             if (!File.Exists(filePath))
             {
 
-                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} variable content is invalid. {filePath} does not exists. "); 
-                return null; 
+                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} variable content is invalid, {filePath} does not exists. ");
+                return null;
             }
 
             string serializedXmlString = ReadFromFile(filePath);
@@ -54,16 +60,35 @@ namespace DataGridSampleProject
             {
                 return DeserializeFromXml<List<Employee>>(ReadFromFile(serializedXmlString));
             }
-            catch 
+            catch
             {
-                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} contains invalid data to process and unable to deserialize into {nameof(List<Employee>)}. "); 
-                return null; 
+                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} contains invalid data to process and unable to deserialize into {nameof(List<Employee>)}. ");
+                return null;
             }
         }
 
-        public static void SaveEmployees(List<Employee> employeeList, string filePath)
+        public static bool SaveEmployees(List<Employee> employeeList, string filePath)
         {
-            // Logic 
+
+            // Check whether filepath is of an xml file
+            if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
+            {
+
+                Trace.WriteLine($"[Utils] SaveEmployees(): {filePath} is not an xml filepath. "); 
+                return false; 
+            }
+
+            // if filePath is invalid, return false. 
+            if (!File.Exists(filePath))
+            {
+
+                Trace.WriteLine($"[Utils] SaveEmployees(): {nameof(filePath)} variable content is invalid, {filePath} does not exists. "); 
+                return false; 
+            }
+
+            // Overwrite the contents. 
+
+
             string serializedXmlString = SerializeToXml<List<Employee>>(employeeList);
             WriteToFile(serializedXmlString, filePath);
         }
@@ -135,12 +160,6 @@ namespace DataGridSampleProject
             }
         }
 
-        /// <summary>
-        /// Delete an Employee object from Employee List
-        /// </summary>
-        /// <param name="id">Id of employee to be deleted</param>
-        /// <param name="filePath">Path of xml file</param>
-        /// <returns>Updated employee list</returns>
         public static List<Employee> DeleteEmployee(string filePath, int id)
         {
 
@@ -163,14 +182,14 @@ namespace DataGridSampleProject
         /// <param name="obj">Generic object</param>
         /// <typeparam name="T">Type of generic object</typeparam>
         /// <returns>xml string</returns>
-        public static string SerializeToXml<T>(T obj)
+        public static string? SerializeToXml<T>(T obj)
         {
 
             if (obj == null)
             {
 
-                Trace.WriteLine("[Error] [Utils] [SerializeToXml] Argument is null");
-                throw new ArgumentNullException("[Utils] [SerializeToXml] Argument cannot be null");
+                Trace.WriteLine("[Utils] SerializeToXml(): Argument is null");
+                return null; 
             }
 
             XmlSerializer serializer = new XmlSerializer(typeof(T));
