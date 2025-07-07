@@ -37,8 +37,7 @@ namespace DataGridSampleProject
                 Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} variable content is invalid, {filePath} does not exists. ");
                 return null;
             }
-
-            if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
+            else if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
             {
 
                 Trace.WriteLine($"[Utils] LoadEmployees(): {filePath} is not an xml filepath. ");
@@ -46,13 +45,17 @@ namespace DataGridSampleProject
             }
 
 
-            string serializedXmlString = ReadFromFile(filePath);
-
-            // If content is empty, create an empty file and return empty list
-            if (String.IsNullOrEmpty(serializedXmlString))
+            // Read file content. If file does not exists, create file. 
+            string? serializedXmlString = ReadFromFile(filePath, false);
+            if (serializedXmlString == null)
             {
-                return new List<Employee>();
+                // BREAKPOINT
             }
+
+            // if (String.IsNullOrEmpty(serializedXmlString))
+            // {
+            //     return new List<Employee>();
+            // }
 
 
             // If content is not valid, exception is thrown. 
@@ -276,23 +279,59 @@ namespace DataGridSampleProject
         }
 
         /// <summary>
+        /// Create file
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>File creation status</returns>
+        public static bool CreateFile(string filePath)
+        {
+            // If file already exists, return status error
+            if (File.Exists(filePath))
+            {
+
+                Trace.WriteLine($"[Utils] CreateFile(): File already exists in path {filePath}. ");
+                return false;
+            }
+
+            // Create file. If creation fails, return status error. 
+            // FIXME: Advanced ErrorHandling: put the below line inside try catch
+            try
+            {
+
+                using (File.Create(filePath)) { }
+            }
+            catch
+            {
+
+                Trace.WriteLine($"[Utils] CreateFile(): File creation failed. Please debug the code, error handling is poorly implemented in this function.");
+                return false; 
+            }
+
+            // Return status OK. 
+            return true; 
+        }
+
+        /// <summary>
         /// Read contents from a file
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>Content of file</returns>
-        public static string? ReadFromFile(string filePath)
+        public static string? ReadFromFile(string filePath, bool writeTrace = true)
         {
 
             // return null if file does not exists. 
-            if (!File.exists(filePath))
+            if (!File.Exists(filePath))
             {
 
-                Trace.WriteLine($"[Utils] ReadFromFile(): File does not exist in this filepath {filePath}"); 
-                return null; 
+                if (writeTrace)
+                {
+                    Trace.WriteLine($"[Utils] ReadFromFile(): File does not exist in this filepath {filePath}");
+                }
+                return null;
             }
 
             // return file content. 
-            return File.ReadAllText(filePath); 
+            return File.ReadAllText(filePath);
         }
 
         /// <summary>
