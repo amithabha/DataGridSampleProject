@@ -22,7 +22,6 @@ namespace DataGridSampleProject
     public class Utils
     {
 
-
         /// <summary>
         /// Load Employee list from storage xml file. 
         /// </summary>
@@ -30,44 +29,49 @@ namespace DataGridSampleProject
         /// <returns>List of Employees</returns>
         public static List<Employee>? LoadEmployees(string filePath)
         {
+
             // Return null if filepath is invalid or does not end with .xml
             if (!File.Exists(filePath))
             {
 
-                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} variable content is invalid, {filePath} does not exists. ");
+                Trace.WriteLine($"[Utils] LoadEmployees(): file does not exists in path {filePath}. ");
                 return null;
             }
             else if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
             {
 
-                Trace.WriteLine($"[Utils] LoadEmployees(): {filePath} is not an xml filepath. ");
+                Trace.WriteLine($"[Utils] LoadEmployees(); invalid xml filepath: {filePath}. ");
                 return null;
             }
 
-
-            // Read file content. If file does not exists, create file. 
+            // Read file content. If file does not exists, create file and return empty list
             string? serializedXmlString = ReadFromFile(filePath, false);
+
             if (serializedXmlString == null)
             {
-                // BREAKPOINT
+
+                bool status = CreateFile(filePath);
+                if (!status)
+                {
+
+                    Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(CreateFile)}() failed and returned status error. ");
+                    return null;
+                }
+
+                return new List<Employee>();
             }
 
-            // if (String.IsNullOrEmpty(serializedXmlString))
-            // {
-            //     return new List<Employee>();
-            // }
+            // Deserialize serialized string. If success, return employee list and if failed, return status error. 
+            List<Employee>? employeeList = DeserializeFromXml<List<Employee>>(serializedXmlString);
 
-
-            // If content is not valid, exception is thrown. 
-            try
+            if (employeeList == null)
             {
-                return DeserializeFromXml<List<Employee>>(ReadFromFile(serializedXmlString));
+
+                Trace.WriteLine($"[Utils] LoadEmployees(); Xml file Deserialization failed: {nameof(DeserializeFromXml)}() returned null. ");
+                return null; 
             }
-            catch
-            {
-                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} contains invalid data to process and unable to deserialize into {nameof(List<Employee>)}. ");
-                return null;
-            }
+
+            return employeeList; 
         }
 
         /// <summary>
@@ -249,19 +253,28 @@ namespace DataGridSampleProject
         /// <summary>
         /// Deserialize xml string to object of type T 
         /// </summary>
-        /// <typeparam name="T">Return object type</typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="serializedXmlString">Serialized string</param>
         /// <returns>Object of type T</returns> 
-        public static T DeserializeFromXml<T>(string serializedXmlString)
+        public static T? DeserializeFromXml<T>(string serializedXmlString)
+        // FIXME: Please write extensive error handling for this function. 
         {
-            if (string.IsNullOrEmpty(serializedXmlString))
-            {
-                Trace.WriteLine("[Error] [Utils] [DeserializeFromXml] Argument is null");
-                throw new ArgumentNullException("[Utils] [DeserializeFromXml] Argument cannot be null");
-            }
 
             XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (StringReader stringReader = new StringReader(serializedXmlString))
+
+            // Create stringreader
+            try
+            {
+
+                StringReader stringReader = new StringReader(serializedXmlString);
+            }
+            catch (exception ex)
+            {
+
+                Trace.WriteLine($"[Utils] DeserializeFromXml(); Error: {ex.message}; Stack Trace: {ex.StackTrace}");
+                return null; 
+            }
+            using (stringReader)
             {
 
                 try
@@ -270,10 +283,11 @@ namespace DataGridSampleProject
                     T obj = (T)serializer.Deserialize(stringReader);
                     return obj;
                 }
-                catch 
+                catch
                 {
 
-                    throw new InvalidDataException("[Utils] [DeserializeFromXml] Invalid input data");
+                    Trace.WriteLine($"[Utils] DeserializeFromXml(): XmlSerializer.Deserialize() failed to deserialize string. ");
+                    return null;
                 }
             }
         }
