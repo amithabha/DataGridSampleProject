@@ -67,6 +67,12 @@ namespace DataGridSampleProject
             }
         }
 
+        /// <summary>
+        /// Save an Employee list in a file
+        /// </summary>
+        /// <param name="employeeList"></param>
+        /// <param name="filePath"></param>
+        /// <returns>execution status</returns> 
         public static bool SaveEmployees(List<Employee> employeeList, string filePath)
         {
 
@@ -104,27 +110,47 @@ namespace DataGridSampleProject
             return true; 
         }
 
-        public static List<Employee>? AddEmployee(Employee employee, string filePath)
+        /// <summary>
+        /// Add employee to the database 
+        /// </summary>
+        /// <param name="employee">Employee object to be added</param>
+        /// <param name="filePath"></param>
+        /// <returns>status</returns>
+        public static bool AddEmployee(Employee employee, string filePath)
         {
 
+            // Load employees. Return status error if loading fails. 
             List<Employee>? employeeList = LoadEmployees(filePath);
 
             if (employeeList == null)
             {
 
                 Trace.WriteLine($"[Utils] AddEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
-                return null; 
+                return false;
             }
-            else
+
+            // Add employee to the list
+            employeeList.Add(employee);
+
+            // Save employee list. Return status error when saving fails.  
+            bool status = SaveEmployees(employeeList, filePath);
+            if (!status)
             {
 
-                employeeList.Add(employee);
-                SaveEmployees(employeeList, filePath);
-
-                return employeeList;
+                Trace.WriteLine($"[Utils] AddEmployee(): {nameof(SaveEmployees)}() returned status error. ");
+                return false;
             }
+
+            // return status ok 
+            return true; 
         }
 
+        /// <summary>
+        /// Edit data of an employee in xml database. 
+        /// </summary>
+        /// <param name="updatedEmployee">Employee object containing updated data</param>
+        /// <param name="filePath"></param>
+        /// <returns>execution status</returns> 
         public static bool EditEmployee(Employee updatedEmployee, string filePath)
         {
 
