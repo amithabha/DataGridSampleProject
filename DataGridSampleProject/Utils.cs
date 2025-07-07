@@ -30,7 +30,14 @@ namespace DataGridSampleProject
         /// <returns>List of Employees</returns>
         public static List<Employee>? LoadEmployees(string filePath)
         {
-            // if string does not end with .xml
+            // Return null if filepath is invalid or does not end with .xml
+            if (!File.Exists(filePath))
+            {
+
+                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} variable content is invalid, {filePath} does not exists. ");
+                return null;
+            }
+
             if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
             {
 
@@ -38,13 +45,6 @@ namespace DataGridSampleProject
                 return null;
             }
 
-            // If filePath is invalid, return null
-            if (!File.Exists(filePath))
-            {
-
-                Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(filePath)} variable content is invalid, {filePath} does not exists. ");
-                return null;
-            }
 
             string serializedXmlString = ReadFromFile(filePath);
 
@@ -278,19 +278,21 @@ namespace DataGridSampleProject
         /// <summary>
         /// Read contents from a file
         /// </summary>
-        /// <param name="filePath">Path of the file</param>
-        /// <returns>File content in String</returns>
-        public static string ReadFromFile(string filePath)
+        /// <param name="filePath"></param>
+        /// <returns>Content of file</returns>
+        public static string? ReadFromFile(string filePath)
         {
 
-            if (File.exists(filePath))
+            // return null if file does not exists. 
+            if (!File.exists(filePath))
             {
-                return File.ReadAllText(filePath); 
+
+                Trace.WriteLine($"[Utils] ReadFromFile(): File does not exist in this filepath {filePath}"); 
+                return null; 
             }
-            else
-            {
-                throw FileNotFoundException(nameof(filePath), "File does not exist in the path. "); 
-            }
+
+            // return file content. 
+            return File.ReadAllText(filePath); 
         }
 
         /// <summary>
