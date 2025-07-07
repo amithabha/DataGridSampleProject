@@ -125,50 +125,54 @@ namespace DataGridSampleProject
             }
         }
 
-        public static List<Employee>? EditEmployee(Employee updatedEmployee, string filePath)
+        public static bool EditEmployee(Employee updatedEmployee, string filePath)
         {
 
+            // Load employee list. Return status error if employee list is null or empty.  
             List<Employee>? employeeList = LoadEmployees(filePath);
 
             if (employeeList == null)
             {
 
                 Trace.WriteLine($"[Utils] EditEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
-                return null;
+                return false;
             }
             else if (employeeList.Count == 0)
             {
 
                 Trace.WriteLine($"[Utils] EditEmployee(); Unexpected behaviour: {nameof(employeeList)} of type {nameof(List<Employee>)}does not contain any employee record to edit. ");
-                return null; 
+                return false; 
             }
-            else
+
+            // Get employee record from employee list. Return status error if record not found. 
+            Employee employee = employeeList.FirstOrDefault(u => u.Id == updatedEmployee.Id);
+
+            if (employee == null)
+            {
+                Trace.WriteLine($"[Utils] EditEmployee(); {nameof(updatedEmployee)} does not exist in employeeList. ");
+                return false; 
+            }
+
+            // Update employee data 
+            employee.Name = updatedEmployee.Name;
+            employee.Designation = updatedEmployee.Designation;
+            employee.EmailId = updatedEmployee.EmailId;
+            employee.Reporter = updatedEmployee.Reporter;
+            employee.Reportee = updatedEmployee.Reportee;
+            employee.ProductLineResponsibility = updatedEmployee.ProductLineResponsibility;
+            employee.WorkExperience = updatedEmployee.WorkExperience; 
+
+            // Saving the data back to xml file. Return status error if saving failed. 
+            bool status = SaveEmployees(employeeList, filePath);
+            if (!status)
             {
 
-                Employee employee = employeeList.FirstOrDefault(u => u.Id == updatedEmployee.Id);
-
-                if (employee == null)
-                {
-                    Trace.WriteLine($"[Utils] EditEmployee(); {nameof(updatedEmployee)} does not exist in employeeList. ");
-                    return null; 
-                }
-                else
-                {
-
-                    // Updating the employee information 
-                    employee.Name = updatedEmployee.Name;
-                    employee.Designation = updatedEmployee.Designation;
-                    employee.EmailId = updatedEmployee.EmailId;
-                    employee.Reporter = updatedEmployee.Reporter;
-                    employee.Reportee = updatedEmployee.Reportee;
-                    employee.ProductLineResponsibility = updatedEmployee.ProductLineResponsibility;
-
-                    // Saving the data back to xml file
-                    SaveEmployees(employeeList, filePath);
-
-                    return employeeList;
-                }
+                Trace.WriteLine($"[Utils] EditEmployee(): {nameof(SaveEmployees)}() returned status error. "); 
+                return false; 
             }
+
+            // Return status ok
+            return true; 
         }
 
         public static List<Employee> DeleteEmployee(string filePath, int id)
