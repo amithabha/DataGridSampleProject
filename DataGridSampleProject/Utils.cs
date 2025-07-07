@@ -86,11 +86,22 @@ namespace DataGridSampleProject
                 return false; 
             }
 
+            // Serialize the contents. 
+            string? serializedXmlString = SerializeToXml<List<Employee>>(employeeList);
+
+            // If content is null, return false
+            if (serializedXmlString == null)
+            {
+
+                Trace.WriteLine($"[Utils] SaveEmployees(): SerializeToXml returned invalid data"); 
+                return false;
+            }
+
             // Overwrite the contents. 
+            File.WriteAllText(filePath, serializedXmlString); 
 
-
-            string serializedXmlString = SerializeToXml<List<Employee>>(employeeList);
-            WriteToFile(serializedXmlString, filePath);
+            // return status ok
+            return true; 
         }
 
         public static List<Employee>? AddEmployee(Employee employee, string filePath)
