@@ -61,6 +61,7 @@ namespace DataGridSampleProject
                 return new List<Employee>();
             }
 
+
             // Deserialize serialized string. If success, return employee list and if failed, return status error. 
             List<Employee>? employeeList = DeserializeFromXml<List<Employee>>(serializedXmlString);
 
@@ -182,6 +183,7 @@ namespace DataGridSampleProject
 
             if (employee == null)
             {
+
                 Trace.WriteLine($"[Utils] EditEmployee(); {nameof(updatedEmployee)} does not exist in employeeList. ");
                 return false; 
             }
@@ -208,15 +210,53 @@ namespace DataGridSampleProject
             return true; 
         }
 
-        public static List<Employee> DeleteEmployee(string filePath, int id)
+        public static bool DeleteEmployee(string filePath, int id)
         {
 
-            List<Employee> employeeList = LoadEmployees(filePath);
+            // Load employee list
+            List<Employee>? employeeList = LoadEmployees(filePath);
 
-            employeeList.RemoveAll(u => u.Id == id);
-            SaveEmployees(employeeList, filePath);
+            if (employeeList == null)
+            {
 
-            return employeeList;
+                Trace.WriteLine($"[Utils] DeleteEmployee(); {nameof(LoadEmployees)}() malfunctioned and returned null. ");
+                return false;
+            }
+            else if (employeeList.Count == 0)
+            {
+
+                Trace.WriteLine($"[Utils] DeleteEmployee(); Unexpected behaviour: {nameof(employeeList)} of type {nameof(List<Employee>)}does not contain any employee record to edit. ");
+                return false; 
+            }
+
+            // Remove record from employee list 
+            int count = employeeList.RemoveAll(u => u.Id == id);
+
+            if (count != 1)
+            {
+                if (count == 0)
+                {
+                    Trace.WriteLine($"[Utils] DeleteEmployee(): Record with id {id} does not exist in the employee list. ");
+                }
+                else
+                {
+                    Trace.WriteLine($"[Utils] DeleteEmployee(): Employee list contained duplicate entries. ");
+                }
+                return false;
+            }
+
+            // Save back the data to xml database
+            bool status = SaveEmployees(employeeList, filePath);
+
+            if (!status)
+            {
+
+                Trace.WriteLine($"[Utils] DeleteEmployee(): {nameof(SaveEmployees)}() failed and returned status error. ");
+                return false;
+            }
+
+            // return status OK
+            return true;
         }
 
 
@@ -347,17 +387,5 @@ namespace DataGridSampleProject
             // return file content. 
             return File.ReadAllText(filePath);
         }
-
-        /// <summary>
-        /// Write contents to a file
-        /// </summary>
-        /// <param name="content">content in string</param>
-        /// <param name="filePath">File to which content to be written</param>
-        /// <returns></returns>
-        public static void WriteToFile(string content, string filePath)
-        {
-            File.WriteAllText(filePath, content);
-        }
-
     }
 }
