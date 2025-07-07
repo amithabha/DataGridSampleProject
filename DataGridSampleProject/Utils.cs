@@ -23,53 +23,48 @@ namespace DataGridSampleProject
     {
 
         /// <summary>
-        /// Load Employee list from storage xml file. 
+        /// Load Employee list from storage xml file. File will be created if it does not exists. 
         /// </summary>
         /// <param name="filePath">Path of xml file</param>
         /// <returns>List of Employees</returns>
-        public static List<Employee>? LoadEmployees(string filePath)
+        public static List<Employee> LoadEmployees(string filePath)
         {
 
-            // Return null if filepath is invalid or does not end with .xml
-            if (!File.Exists(filePath))
-            {
-
-                Trace.WriteLine($"[Utils] LoadEmployees(): file does not exists in path {filePath}. ");
-                return null;
-            }
-            else if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
+            // Return null if filepath does not end with .xml
+            if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
             {
 
                 Trace.WriteLine($"[Utils] LoadEmployees(); invalid xml filepath: {filePath}. ");
                 return null;
             }
 
-            // Read file content. If file does not exists, create file and return empty list
-            string? serializedXmlString = ReadFromFile(filePath, false);
-
-            if (serializedXmlString == null)
+            // If file does not exists, create one. 
+            if (!File.Exists(filePath))
             {
-
-                bool status = CreateFile(filePath);
+                bool status = CreateFile(filePath); 
                 if (!status)
                 {
 
                     Trace.WriteLine($"[Utils] LoadEmployees(): {nameof(CreateFile)}() failed and returned status error. ");
                     return null;
                 }
-
-                return new List<Employee>();
+                return new List<Employee>(); 
             }
 
+            // Read file content. 
+            string serializedXmlString = ReadFromFile(filePath, false);
+            if (String.IsNullOrEmpty(serializedXmlString))
+            {
+                return new List<Employee>(); 
+            }
 
             // Deserialize serialized string. If success, return employee list and if failed, return status error. 
-            List<Employee>? employeeList = DeserializeFromXml<List<Employee>>(serializedXmlString);
+            List<Employee> employeeList = DeserializeFromXml<List<Employee>>(serializedXmlString);
 
             if (employeeList == null)
             {
 
                 Trace.WriteLine($"[Utils] LoadEmployees(); Xml file Deserialization failed: {nameof(DeserializeFromXml)}() returned null. ");
-                return null; 
             }
 
             return employeeList; 
@@ -96,12 +91,12 @@ namespace DataGridSampleProject
             if (!File.Exists(filePath))
             {
 
-                Trace.WriteLine($"[Utils] SaveEmployees(): {nameof(filePath)} variable content is invalid, {filePath} does not exists. "); 
+                Trace.WriteLine($"[Utils] SaveEmployees(): File does not exist in filepath: {filePath}"); 
                 return false; 
             }
 
             // Serialize the contents. 
-            string? serializedXmlString = SerializeToXml<List<Employee>>(employeeList);
+            string serializedXmlString = SerializeToXml<List<Employee>>(employeeList);
 
             // If content is null, return false
             if (serializedXmlString == null)
@@ -112,10 +107,18 @@ namespace DataGridSampleProject
             }
 
             // Overwrite the contents. 
-            File.WriteAllText(filePath, serializedXmlString); 
+            try
+            {
 
-            // return status ok
-            return true; 
+                File.WriteAllText(filePath, serializedXmlString);
+                return true; 
+            }
+            catch (Exception ex)
+            {
+
+                Trace.WriteLine($"[Utils] SaveEmployees(): Failed to write into filepath: {filePath}. Error. {ex.message} ");
+                return false; 
+            }
         }
 
         /// <summary>
@@ -128,14 +131,14 @@ namespace DataGridSampleProject
         {
 
             // Load employees. Return status error if loading fails. 
-            List<Employee>? employeeList = LoadEmployees(filePath);
+            List<Employee> employeeList = LoadEmployees(filePath);
 
-            if (employeeList == null)
-            {
+            // if (employeeList == null)
+            // {
 
-                Trace.WriteLine($"[Utils] AddEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
-                return false;
-            }
+            //     Trace.WriteLine($"[Utils] AddEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
+            //     return false;
+            // }
 
             // Add employee to the list
             employeeList.Add(employee);
@@ -163,15 +166,16 @@ namespace DataGridSampleProject
         {
 
             // Load employee list. Return status error if employee list is null or empty.  
-            List<Employee>? employeeList = LoadEmployees(filePath);
+            List<Employee> employeeList = LoadEmployees(filePath);
 
-            if (employeeList == null)
-            {
+            // if (employeeList == null)
+            // {
 
-                Trace.WriteLine($"[Utils] EditEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
-                return false;
-            }
-            else if (employeeList.Count == 0)
+            //     Trace.WriteLine($"[Utils] EditEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
+            //     return false;
+            // }
+            // else if (employeeList.Count == 0)
+            if (employeeList.Count == 0)
             {
 
                 Trace.WriteLine($"[Utils] EditEmployee(); Unexpected behaviour: {nameof(employeeList)} of type {nameof(List<Employee>)}does not contain any employee record to edit. ");
@@ -214,15 +218,16 @@ namespace DataGridSampleProject
         {
 
             // Load employee list
-            List<Employee>? employeeList = LoadEmployees(filePath);
+            List<Employee> employeeList = LoadEmployees(filePath);
 
-            if (employeeList == null)
-            {
+            // if (employeeList == null)
+            // {
 
-                Trace.WriteLine($"[Utils] DeleteEmployee(); {nameof(LoadEmployees)}() malfunctioned and returned null. ");
-                return false;
-            }
-            else if (employeeList.Count == 0)
+            //     Trace.WriteLine($"[Utils] DeleteEmployee(); {nameof(LoadEmployees)}() malfunctioned and returned null. ");
+            //     return false;
+            // }
+            // else if (employeeList.Count == 0)
+            if (employeeList.Count == 0)
             {
 
                 Trace.WriteLine($"[Utils] DeleteEmployee(); Unexpected behaviour: {nameof(employeeList)} of type {nameof(List<Employee>)}does not contain any employee record to edit. ");
@@ -270,7 +275,7 @@ namespace DataGridSampleProject
         /// <param name="obj">Generic object</param>
         /// <typeparam name="T">Type of generic object</typeparam>
         /// <returns>xml string</returns>
-        public static string? SerializeToXml<T>(T obj)
+        private static string SerializeToXml<T>(T obj)
         {
 
             if (obj == null)
@@ -280,13 +285,23 @@ namespace DataGridSampleProject
                 return null; 
             }
 
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-            using (StringWriter stringWriter = new StringWriter())
+            try
             {
 
-                serializer.Serialize(stringWriter, obj);
-                return stringWriter.ToString();
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+                using (StringWriter stringWriter = new StringWriter())
+                {
+
+                    serializer.Serialize(stringWriter, obj);
+                    return stringWriter.ToString();
+                }
+            }
+            catch (exception ex)
+            {
+
+                Trace.WriteLine($"[Utils] SerializeToXml(): Serialization failed. Error: {ex.message}. ");
+                return null; 
             }
         }
 
@@ -296,38 +311,32 @@ namespace DataGridSampleProject
         /// <typeparam name="T"></typeparam>
         /// <param name="serializedXmlString">Serialized string</param>
         /// <returns>Object of type T</returns> 
-        public static T? DeserializeFromXml<T>(string serializedXmlString)
-        // FIXME: Please write extensive error handling for this function. 
+        private static T DeserializeFromXml<T>(string serializedXmlString)
         {
 
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-            // Create stringreader
-            try
+            if (String.IsNullOrEmpty(serializedXmlString))
             {
-
-                StringReader stringReader = new StringReader(serializedXmlString);
+                Trace.WriteLine($"[Utils] DeserializeFromXml(): Argument is null or empty. ");
+                return null;
             }
-            catch (exception ex)
+            else
             {
-
-                Trace.WriteLine($"[Utils] DeserializeFromXml(); Error: {ex.message}; Stack Trace: {ex.StackTrace}");
-                return null; 
-            }
-            using (stringReader)
-            {
-
                 try
                 {
 
-                    T obj = (T)serializer.Deserialize(stringReader);
-                    return obj;
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+                    using (StringReader stringReader = new StringReader(serializedXmlString))
+                    {
+
+                        return (T)serializer.Deserialize(stringReader);
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
 
-                    Trace.WriteLine($"[Utils] DeserializeFromXml(): XmlSerializer.Deserialize() failed to deserialize string. ");
-                    return null;
+                    Trace.WriteLine($"[Utils] DeserializeFromXml(): XML Deserialization failed. Error: {ex.message}");
+                    return null; 
                 }
             }
         }
@@ -337,7 +346,7 @@ namespace DataGridSampleProject
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>File creation status</returns>
-        public static bool CreateFile(string filePath)
+        private static bool CreateFile(string filePath)
         {
             // If file already exists, return status error
             if (File.Exists(filePath))
@@ -353,6 +362,7 @@ namespace DataGridSampleProject
             {
 
                 using (File.Create(filePath)) { }
+                return true; 
             }
             catch
             {
@@ -360,9 +370,6 @@ namespace DataGridSampleProject
                 Trace.WriteLine($"[Utils] CreateFile(): File creation failed. Please debug the code, error handling is poorly implemented in this function.");
                 return false; 
             }
-
-            // Return status OK. 
-            return true; 
         }
 
         /// <summary>
@@ -370,7 +377,7 @@ namespace DataGridSampleProject
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>Content of file</returns>
-        public static string? ReadFromFile(string filePath, bool writeTrace = true)
+        private static string ReadFromFile(string filePath, bool writeTrace = true)
         {
 
             // return null if file does not exists. 
@@ -384,7 +391,6 @@ namespace DataGridSampleProject
                 return null;
             }
 
-            // return file content. 
             return File.ReadAllText(filePath);
         }
     }
