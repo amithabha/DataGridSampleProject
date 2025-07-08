@@ -116,7 +116,7 @@ namespace DataGridSampleProject
             catch (Exception ex)
             {
 
-                Trace.WriteLine($"[Utils] SaveEmployees(): Failed to write into filepath: {filePath}. Error. {ex.message} ");
+                Trace.WriteLine($"[Utils] SaveEmployees(): Failed to write into filepath: {filePath}. Error. {ex.Message} ");
                 return false; 
             }
         }
@@ -297,10 +297,10 @@ namespace DataGridSampleProject
                     return stringWriter.ToString();
                 }
             }
-            catch (exception ex)
+            catch (Exception ex)
             {
 
-                Trace.WriteLine($"[Utils] SerializeToXml(): Serialization failed. Error: {ex.message}. ");
+                Trace.WriteLine($"[Utils] SerializeToXml(): Serialization failed. Error: {ex.Message}. ");
                 return null; 
             }
         }
@@ -317,7 +317,8 @@ namespace DataGridSampleProject
             if (String.IsNullOrEmpty(serializedXmlString))
             {
                 Trace.WriteLine($"[Utils] DeserializeFromXml(): Argument is null or empty. ");
-                return null;
+                // return null;
+                return default(T); 
             }
             else
             {
@@ -335,8 +336,9 @@ namespace DataGridSampleProject
                 catch (Exception ex)
                 {
 
-                    Trace.WriteLine($"[Utils] DeserializeFromXml(): XML Deserialization failed. Error: {ex.message}");
-                    return null; 
+                    Trace.WriteLine($"[Utils] DeserializeFromXml(): XML Deserialization failed. Error: {ex.Message}");
+                    // return null; 
+                    return default(T); 
                 }
             }
         }
