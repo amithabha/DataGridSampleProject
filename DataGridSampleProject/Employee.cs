@@ -2,26 +2,31 @@ namespace DataGridSampleProject
 {
     public class Employee
     {
-        public int Id;
-        public string Name;
-        public string Designation;
-        public string EmailId;
-        public string Reporter;
-        public string Reportee;
-        public string ProductLineResponsibility;
-        public int WorkExperience; 
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Designation { get; set; }
+        public string EmailId { get; set; }
+        public string Reporter { get; set; }
+        public string Reportee { get; set; }
+        public string ProductLineResponsibility { get; set; }
+        public int WorkExperience { get; set; }
 
-        public Employee (int id, string name, string designation, string emailId,
+        /// <summary>
+        /// Parameterless Construction for XML serialization 
+        /// </summary>
+        public Employee() {}
+
+        public Employee(int id, string name, string designation, string emailId,
         string reporter, string reportee, string productLineResponsibility, int workExperience)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Designation = designation;
-            this.EmailId = emailId;
-            this.Reporter = reporter;
-            this.Reportee = reportee;
-            this.ProductLineResponsibility = productLineResponsibility;
-            this.WorkExperience = workExperience;
+            Id = id;
+            Name = name;
+            Designation = designation;
+            EmailId = emailId;
+            Reporter = reporter;
+            Reportee = reportee;
+            ProductLineResponsibility = productLineResponsibility;
+            WorkExperience = workExperience;
         }
     }
 }

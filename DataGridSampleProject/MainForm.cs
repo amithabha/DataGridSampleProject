@@ -14,21 +14,42 @@ namespace DataGridSampleProject
     public partial class MainForm : Form
     {
 
-        private static readonly string _xmlfile = "employees.txt"; 
-
         public MainForm()
         {
 
             InitializeComponent();
+
+            /* ***********************
+               Load is an event member of Form class.   
+               Load event is fired when form is loaded into memory, 
+               right before it is displayed for Ist time. 
+
+               += : Subscription operator. When Load event occur, all 
+                    the methods subscribed to it will be executed. 
+               ***********************/
+            this.Load += MainForm_Load; 
         }
 
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+            LoadData(); 
+        }
+
+        /// <summary>
+        /// Load data from xml file and bind data to DataGridView table 
+        /// </summary>
         private void LoadData()
         {
-            List<Employee> employees = Utils.LoadEmployees(_xmlfile);
-            // BindingSource bindingSource = new BindingSource();
-            // bindingSource.DataSource = employees;
-            // dgvEmployees.DataSource = bindingSource; 
-            dgvEmployees.DataSource = employees; 
+
+            List<Employee> employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
+
+            // Binding Source: used to decouple table from data. Don't know why. 
+            BindingSource bindingSource = new BindingSource();
+            bindingSource.DataSource = employees;
+            dgvEmployees.DataSource = bindingSource; 
         }
 
         private void addButton_Click(object sender, EventArgs e)
