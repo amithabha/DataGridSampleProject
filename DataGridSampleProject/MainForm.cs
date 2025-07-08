@@ -22,7 +22,7 @@ namespace DataGridSampleProject
             InitializeComponent();
         }
 
-        public void LoadData()
+        private void LoadData()
         {
             List<Employee> employees = Utils.LoadEmployees(_xmlfile);
             // BindingSource bindingSource = new BindingSource();
@@ -37,6 +37,11 @@ namespace DataGridSampleProject
             DetailsForm detailsForm = new DetailsForm();
             detailsForm.Show();
             this.Hide();
+            if (detailsForm.ShowDialog() == DialogResult.OK)
+            {
+                this.Show();
+                LoadData();
+            }
         }
     }
 }

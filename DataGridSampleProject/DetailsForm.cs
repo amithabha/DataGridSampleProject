@@ -13,17 +13,74 @@ namespace DataGridSampleProject
 {
     public partial class DetailsForm : Form
     {
-        public DetailsForm()
+        private static readonly string _xmlfile = "employees.txt"; 
+        private static bool _editMode; 
+        public DetailsForm(bool editMode = false)
         {
 
+            _editMode = editMode; 
             InitializeComponent();
         }
 
         private void submit_Click(object sender, EventArgs e)
         {
 
-            ErrorHandler(); 
+            ErrorHandler();
+            Employee employee = CreateEmployee();
+
+            if (_editMode == true)
+            {
+
+                Utils.EditEmployee(employee, _xmlfile);
+            }
+            else
+            {
+
+                Utils.AddEmployee(employee, _xmlfile);
+            }
+
+            Close(); 
+            DialogResult = DialogResult.OK;
         }
+
+        private Employee CreateEmployee()
+        {
+            Employee employee = new Employee
+                                (
+                                    int.Parse(txtId.Text),
+                                    txtName.Text,
+                                    comboxDesignation.Text,
+                                    txtEmail.Text,
+                                    txtReporter.Text, 
+                                    txtReportee.Text, 
+                                    txtProductLineResponsibility.Text, 
+                                    int.Parse(txtWorkExperience.Text)
+                                );
+            return employee; 
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void ErrorHandler()
         {
@@ -76,9 +133,18 @@ namespace DataGridSampleProject
             }
 
             // Assigning error for non-integer Id text.  
+            int result; 
+
             if (!IsEmptyOrNullOrWhiteSpace(txtId) && !int.TryParse(txtId.Text, out _))
             {
-                errId.SetError(txtId, $"Id should be integer");
+                errId.SetError(txtId, $"Id should be a non negative integer");
+            }
+            else if (!IsEmptyOrNullOrWhiteSpace(txtId) && int.TryParse(txtId.Text, out result))
+            {
+                if (result < 0)
+                {
+                    errId.SetError(txtId, $"Id should be non negative integer");
+                }
             }
 
             // FIXME: Check whether email entered is in correct format. 
