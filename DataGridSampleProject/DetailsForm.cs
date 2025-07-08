@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics; 
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -30,21 +31,21 @@ namespace DataGridSampleProject
             // ErrorProvider list
             List<ErrorProvider> errorProviders = new List<ErrorProvider>
             {
-                errName, errEmail, errReporter, errReportee,
+                errId, errName, errEmail, errReporter, errReportee,
                 errProdLineResp, errorWorkExperience
             };
 
             // TextBox list
             List<TextBox> textBoxes = new List<TextBox>
             {
-                txtName, txtEmail, txtReporter, txtReportee,
+                txtId, txtName, txtEmail, txtReporter, txtReportee,
                 txtProductLineResponsibility, txtWorkExperience
             };
 
             // TextBox names
             List<string> TextBoxtitles = new List<string>
             {
-                "Name", "Email Id", "Reporter", "Reportee", "Product Line Responsibility", "Work Experience"
+                "Id", "Name", "Email Id", "Reporter", "Reportee", "Product Line Responsibility", "Work Experience"
             };
 
             // ComboBoxes
@@ -60,10 +61,7 @@ namespace DataGridSampleProject
             };
 
             // Setting error for empty ComboBoxes
-            for (int i = 0; i < comboBoxes.Count; i++)
-            {
-                ErrorAssigner(comboBoxes[i], errorProviders[i], comboBoxTitles[i]);
-            }
+            ErrorAssigner(comboxDesignation, errDesignation, "Designation");
 
             // Setting error for empty TextBoxes
             for (int i = 0; i < textBoxes.Count; i++)
@@ -75,6 +73,12 @@ namespace DataGridSampleProject
             if (!IsEmptyOrNullOrWhiteSpace(txtWorkExperience) && !int.TryParse(txtWorkExperience.Text, out _))
             {
                 errorWorkExperience.SetError(txtWorkExperience, $"Work Experience should be integer");
+            }
+
+            // Assigning error for non-integer Id text.  
+            if (!IsEmptyOrNullOrWhiteSpace(txtId) && !int.TryParse(txtId.Text, out _))
+            {
+                errId.SetError(txtId, $"Id should be integer");
             }
 
             // FIXME: Check whether email entered is in correct format. 

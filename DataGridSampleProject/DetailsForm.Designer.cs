@@ -43,6 +43,8 @@
             this.txtProductLineResponsibility = new System.Windows.Forms.TextBox();
             this.txtWorkExperience = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txtId = new System.Windows.Forms.TextBox();
+            this.Id = new System.Windows.Forms.Label();
             this.comboxDesignation = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
@@ -54,8 +56,7 @@
             this.errReportee = new System.Windows.Forms.ErrorProvider(this.components);
             this.errProdLineResp = new System.Windows.Forms.ErrorProvider(this.components);
             this.errorWorkExperience = new System.Windows.Forms.ErrorProvider(this.components);
-            this.Id = new System.Windows.Forms.Label();
-            this.txtId = new System.Windows.Forms.TextBox();
+            this.errId = new System.Windows.Forms.ErrorProvider(this.components);
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errName)).BeginInit();
@@ -65,6 +66,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.errReportee)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errProdLineResp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorWorkExperience)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errId)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -210,6 +212,24 @@
             this.panel1.Size = new System.Drawing.Size(592, 428);
             this.panel1.TabIndex = 0;
             // 
+            // txtId
+            // 
+            this.txtId.Location = new System.Drawing.Point(323, 5);
+            this.txtId.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtId.Name = "txtId";
+            this.txtId.Size = new System.Drawing.Size(241, 26);
+            this.txtId.TabIndex = 15;
+            // 
+            // Id
+            // 
+            this.Id.AutoSize = true;
+            this.Id.Location = new System.Drawing.Point(24, 6);
+            this.Id.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Id.Name = "Id";
+            this.Id.Size = new System.Drawing.Size(31, 20);
+            this.Id.TabIndex = 14;
+            this.Id.Text = "Id: ";
+            // 
             // comboxDesignation
             // 
             this.comboxDesignation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -287,23 +307,9 @@
             // 
             this.errorWorkExperience.ContainerControl = this;
             // 
-            // Id
+            // errId
             // 
-            this.Id.AutoSize = true;
-            this.Id.Location = new System.Drawing.Point(24, 6);
-            this.Id.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.Id.Name = "Id";
-            this.Id.Size = new System.Drawing.Size(31, 20);
-            this.Id.TabIndex = 14;
-            this.Id.Text = "Id: ";
-            // 
-            // txtId
-            // 
-            this.txtId.Location = new System.Drawing.Point(323, 5);
-            this.txtId.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txtId.Name = "txtId";
-            this.txtId.Size = new System.Drawing.Size(241, 26);
-            this.txtId.TabIndex = 15;
+            this.errId.ContainerControl = this;
             // 
             // DetailsForm
             // 
@@ -329,6 +335,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.errReportee)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errProdLineResp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorWorkExperience)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errId)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -362,5 +369,6 @@
         private System.Windows.Forms.ComboBox comboxDesignation;
         private System.Windows.Forms.TextBox txtId;
         private System.Windows.Forms.Label Id;
+        private System.Windows.Forms.ErrorProvider errId;
     }
 }

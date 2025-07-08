@@ -20,26 +20,16 @@ namespace DataGridSampleProject
         {
 
             InitializeComponent();
-            // LoadData(); 
         }
 
-        // public void LoadData()
-        // {
-
-        //     List<Employee> employeeList = Utils.LoadEmployees(_xmlfile);
-
-        //     // If employeeList is empty list, create a file in filepath 
-        //     if (employeeList.Count == 0)
-        //     {
-
-        //         Utils.SaveEmployees(employeeList, _xmlfile);
-        //     }
-        //     else
-        //     {
-        //         dgvEmployees.DataSource = employeeList;
-        //     }
-
-        // }
+        public void LoadData()
+        {
+            List<Employee> employees = Utils.LoadEmployees(_xmlfile);
+            // BindingSource bindingSource = new BindingSource();
+            // bindingSource.DataSource = employees;
+            // dgvEmployees.DataSource = bindingSource; 
+            dgvEmployees.DataSource = employees; 
+        }
 
         private void addButton_Click(object sender, EventArgs e)
         {
