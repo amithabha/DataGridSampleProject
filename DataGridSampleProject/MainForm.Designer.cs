@@ -29,13 +29,6 @@
         private void InitializeComponent()
         {
             this.dgvEmployees = new System.Windows.Forms.DataGridView();
-            this.nameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.designCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.email = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reporterCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reporteeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.prodLineRespCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.workExp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -52,62 +45,12 @@
             this.dgvEmployees.AllowUserToDeleteRows = false;
             this.dgvEmployees.BackgroundColor = System.Drawing.Color.LemonChiffon;
             this.dgvEmployees.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvEmployees.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.nameCol,
-            this.designCol,
-            this.email,
-            this.reporterCol,
-            this.reporteeCol,
-            this.prodLineRespCol,
-            this.workExp});
             this.dgvEmployees.Location = new System.Drawing.Point(42, 108);
             this.dgvEmployees.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvEmployees.Name = "dgvEmployees";
             this.dgvEmployees.ReadOnly = true;
-            this.dgvEmployees.Size = new System.Drawing.Size(1072, 231);
+            this.dgvEmployees.Size = new System.Drawing.Size(1351, 231);
             this.dgvEmployees.TabIndex = 0;
-            // 
-            // nameCol
-            // 
-            this.nameCol.HeaderText = "Name";
-            this.nameCol.Name = "nameCol";
-            this.nameCol.ReadOnly = true;
-            // 
-            // designCol
-            // 
-            this.designCol.HeaderText = "Designation";
-            this.designCol.Name = "designCol";
-            this.designCol.ReadOnly = true;
-            // 
-            // email
-            // 
-            this.email.HeaderText = "Email Id";
-            this.email.Name = "email";
-            this.email.ReadOnly = true;
-            // 
-            // reporterCol
-            // 
-            this.reporterCol.HeaderText = "Reporter";
-            this.reporterCol.Name = "reporterCol";
-            this.reporterCol.ReadOnly = true;
-            // 
-            // reporteeCol
-            // 
-            this.reporteeCol.HeaderText = "Reportee";
-            this.reporteeCol.Name = "reporteeCol";
-            this.reporteeCol.ReadOnly = true;
-            // 
-            // prodLineRespCol
-            // 
-            this.prodLineRespCol.HeaderText = "Product Line Responsibility";
-            this.prodLineRespCol.Name = "prodLineRespCol";
-            this.prodLineRespCol.ReadOnly = true;
-            // 
-            // workExp
-            // 
-            this.workExp.HeaderText = "Work Experience in SEDEMAC (yrs)";
-            this.workExp.Name = "workExp";
-            this.workExp.ReadOnly = true;
             // 
             // btnAdd
             // 
@@ -115,7 +58,7 @@
             this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnAdd.Location = new System.Drawing.Point(13, 551);
+            this.btnAdd.Location = new System.Drawing.Point(457, 551);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(162, 48);
@@ -130,7 +73,7 @@
             this.btnRemove.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRemove.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnRemove.Location = new System.Drawing.Point(553, 551);
+            this.btnRemove.Location = new System.Drawing.Point(1003, 551);
             this.btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(162, 48);
@@ -157,7 +100,7 @@
             this.btnEdit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEdit.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnEdit.Location = new System.Drawing.Point(283, 551);
+            this.btnEdit.Location = new System.Drawing.Point(725, 551);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(162, 48);
@@ -169,7 +112,7 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Location = new System.Drawing.Point(13, 14);
+            this.panel1.Location = new System.Drawing.Point(380, 14);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(714, 71);
@@ -191,7 +134,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.GreenYellow;
-            this.ClientSize = new System.Drawing.Size(1217, 689);
+            this.ClientSize = new System.Drawing.Size(1494, 689);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnEdit);
@@ -217,13 +160,6 @@
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnEdit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn designCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn email;
-        private System.Windows.Forms.DataGridViewTextBoxColumn reporterCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn reporteeCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn prodLineRespCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn workExp;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label3;
     }

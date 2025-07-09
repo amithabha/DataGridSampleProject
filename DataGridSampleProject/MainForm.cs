@@ -82,7 +82,7 @@ namespace DataGridSampleProject
                 return;
             }
 
-            Employee employee = dgvEmployees.CurrentRow.Tag as Employee; 
+            Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee; 
             using (DetailsForm detailsForm = new DetailsForm(true, employee))
             {
 
@@ -105,7 +105,7 @@ namespace DataGridSampleProject
 
             // FIXME: Confirmation message before deleting
 
-            Employee employee = dgvEmployees.CurrentRow.Tag as Employee;
+            Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee;
             bool status = Utils.DeleteEmployee(AppConstants.XmlFilePath, employee.Id);
             if (!status)
             {

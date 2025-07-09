@@ -87,14 +87,6 @@ namespace DataGridSampleProject
                 return false; 
             }
 
-            // if filePath is invalid, return false. 
-            if (!File.Exists(filePath))
-            {
-
-                Trace.WriteLine($"[Utils] SaveEmployees(): File does not exist in filepath: {filePath}"); 
-                return false; 
-            }
-
             // Serialize the contents. 
             string serializedXmlString = SerializeToXml<List<Employee>>(employeeList);
 
@@ -110,6 +102,7 @@ namespace DataGridSampleProject
             try
             {
 
+                // File.WriteAllText will create file if it is not there. 
                 File.WriteAllText(filePath, serializedXmlString);
                 return true; 
             }
@@ -337,7 +330,6 @@ namespace DataGridSampleProject
                 {
 
                     Trace.WriteLine($"[Utils] DeserializeFromXml(): XML Deserialization failed. Error: {ex.Message}");
-                    // return null; 
                     return default(T); 
                 }
             }
