@@ -51,6 +51,11 @@ namespace DataGridSampleProject
 
             List<Employee> employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
 
+            // Autosizing stuffs
+            dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells; 
+            dgvEmployees.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells; 
+            dgvEmployees.DefaultCellStyle.WrapMode = DataGridViewTriState.True; 
+
             // Binding Source: used to decouple table from data. Don't know why. 
             BindingSource bindingSource = new BindingSource();
             bindingSource.DataSource = employees;

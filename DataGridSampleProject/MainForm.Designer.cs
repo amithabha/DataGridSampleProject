@@ -49,7 +49,7 @@
             this.dgvEmployees.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvEmployees.Name = "dgvEmployees";
             this.dgvEmployees.ReadOnly = true;
-            this.dgvEmployees.Size = new System.Drawing.Size(1351, 231);
+            this.dgvEmployees.Size = new System.Drawing.Size(1161, 231);
             this.dgvEmployees.TabIndex = 0;
             // 
             // btnAdd
@@ -58,7 +58,7 @@
             this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnAdd.Location = new System.Drawing.Point(457, 551);
+            this.btnAdd.Location = new System.Drawing.Point(332, 505);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(162, 48);
@@ -73,7 +73,7 @@
             this.btnRemove.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRemove.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnRemove.Location = new System.Drawing.Point(1003, 551);
+            this.btnRemove.Location = new System.Drawing.Point(798, 505);
             this.btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(162, 48);
@@ -100,7 +100,7 @@
             this.btnEdit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEdit.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnEdit.Location = new System.Drawing.Point(725, 551);
+            this.btnEdit.Location = new System.Drawing.Point(565, 505);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(162, 48);
@@ -112,7 +112,7 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Location = new System.Drawing.Point(380, 14);
+            this.panel1.Location = new System.Drawing.Point(260, 14);
             this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(714, 71);
@@ -122,7 +122,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(100, 20);
+            this.label3.Location = new System.Drawing.Point(92, 20);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(532, 29);
@@ -134,7 +134,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.GreenYellow;
-            this.ClientSize = new System.Drawing.Size(1494, 689);
+            this.ClientSize = new System.Drawing.Size(1243, 689);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnEdit);
