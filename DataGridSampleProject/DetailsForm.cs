@@ -8,42 +8,88 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace DataGridSampleProject
 {
     public partial class DetailsForm : Form
     {
-        private static readonly string _xmlfile = "employees.txt"; 
-        private static bool _editMode; 
-        public DetailsForm(bool editMode = false)
+        private Employee EditEmployee; 
+        private bool _editMode;
+        public DetailsForm(bool editMode = false, Employee employee = null)
         {
 
-            _editMode = editMode; 
+            _editMode = editMode;
+
+            if (_editMode)
+            {
+
+                if (employee == null)
+                {
+                    Trace.WriteLine($"[DetailsForm.cs] [DetailsForm] Constructor; Argument employee should not be null. ");
+                }
+
+                EditEmployee = employee; 
+            }
+
+
             InitializeComponent();
+            this.Load += LoadDetails; 
+        }
+
+        private void LoadDetails(object sender, EventArgs e)
+        {
+
+            if (_editMode)
+            {
+                PopulateEditForm(EditEmployee); 
+            }
         }
 
         private void submit_Click(object sender, EventArgs e)
         {
 
-            ErrorHandler();
-            Employee employee = CreateEmployee();
-
-            if (_editMode == true)
+            bool validity = IsInputValid();
+            if (!validity)
             {
 
-                Utils.EditEmployee(employee, _xmlfile);
+                MessageBox.Show("Please correctly enter the data. ");
+                return;
+            }
+
+            Employee employee = CreateEmployeeFromForm();
+
+            bool status;
+
+            if (_editMode)
+            {
+
+                status = Utils.EditEmployee(employee, AppConstants.XmlFilePath);
+                if (!status)
+                {
+
+                    Trace.WriteLine($"[DetailsForm.cs] [DetailsForm] submit_Click(); EditEmployee() from Utils class failed. ");
+                }
             }
             else
             {
+                status = Utils.AddEmployee(employee, AppConstants.XmlFilePath);
+                if (!status)
+                {
 
-                Utils.AddEmployee(employee, _xmlfile);
+                    Trace.WriteLine($"[DetailsForm.cs] [DetailsForm] submit_Click(); AddEmployee() from Utils class failed. ");
+                }
             }
 
-            Close(); 
-            DialogResult = DialogResult.OK;
+            if (status)
+            {
+
+                DialogResult = DialogResult.OK;
+                Close(); 
+            }
         }
 
-        private Employee CreateEmployee()
+        private Employee CreateEmployeeFromForm()
         {
             Employee employee = new Employee
                                 (
@@ -60,7 +106,90 @@ namespace DataGridSampleProject
         }
 
 
+        private void PopulateEditForm(Employee employee)
+        {
+            txtId.Text = employee.Id.ToString(); 
+            txtId.ReadOnly = true;
+            txtName.Text = employee.Name;
+            comboxDesignation.SelectedItem = employee.Designation;
+            txtEmail.Text = employee.EmailId;
+            txtReporter.Text = employee.Reporter;
+            txtReportee.Text = employee.Reportee;
+            txtProductLineResponsibility.Text = employee.ProductLineResponsibility;
+            txtWorkExperience.Text = employee.WorkExperience.ToString(); 
 
+        }
+
+        private bool IsInputValid()
+        {
+            // Clear all errors
+            errId.Clear();
+            errName.Clear();
+            errDesignation.Clear();
+            errEmail.Clear();
+            errProdLineResp.Clear();
+            errorWorkExperience.Clear();
+
+            bool IsValid = true;
+
+            // Id validation
+            if (String.IsNullOrWhiteSpace(txtId.Text))
+            {
+                errId.SetError(txtId, "Id cannot be empty. ");
+                IsValid = false;
+            }
+            else if (!int.TryParse(txtId.Text, out int id) || id < 0)
+            {
+                errId.SetError(txtId, "Id should be a non-negative integer. ");
+                IsValid = false;
+            }
+
+            // Name validation
+            if (String.IsNullOrWhiteSpace(txtName.Text))
+            {
+                errName.SetError(txtName, "Name cannot be empty. ");
+                IsValid = false;
+            }
+
+            // Designation validation
+            if (comboxDesignation.SelectedItem == null || String.IsNullOrWhiteSpace(comboxDesignation.Text))
+            {
+                errDesignation.SetError( comboxDesignation, "Designation cannot be empty. ");
+                IsValid = false;
+            }
+
+            // Email validation
+            if (String.IsNullOrWhiteSpace(txtEmail.Text))
+            {
+                errEmail.SetError( txtEmail, "Email cannot be empty. ");
+                IsValid = false;
+            }
+            else if (!Regex.IsMatch(txtEmail.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                errEmail.SetError( txtEmail, "Email format is incorrect. ");
+                IsValid = false;
+            }
+
+            // ProductLineResponsibility validation
+            if (String.IsNullOrWhiteSpace(txtProductLineResponsibility.Text))
+            {
+                errProdLineResp.SetError(txtProductLineResponsibility, "ProductLineResponsibility cannot be empty. ");
+                IsValid = false;
+            }
+
+            if (String.IsNullOrWhiteSpace(txtWorkExperience.Text))
+            {
+                errorWorkExperience.SetError( txtWorkExperience, "Work Experience cannot be empty. ");
+                IsValid = false;
+            }
+            else if (!int.TryParse(txtWorkExperience.Text, out int id) || id < 0)
+            {
+                errorWorkExperience.SetError( txtWorkExperience, "Work Experience should be non negative integer. ");
+                IsValid = false;
+            }
+
+            return IsValid; 
+        }
 
 
 
@@ -133,7 +262,7 @@ namespace DataGridSampleProject
             }
 
             // Assigning error for non-integer Id text.  
-            int result; 
+            int result;
 
             if (!IsEmptyOrNullOrWhiteSpace(txtId) && !int.TryParse(txtId.Text, out _))
             {

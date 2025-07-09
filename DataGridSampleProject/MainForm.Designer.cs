@@ -37,8 +37,6 @@
             this.prodLineRespCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.workExp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.addLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.btnRemove = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -115,50 +113,31 @@
             // 
             this.btnAdd.BackColor = System.Drawing.Color.DarkOliveGreen;
             this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAdd.ForeColor = System.Drawing.SystemColors.Control;
             this.btnAdd.Location = new System.Drawing.Point(13, 551);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(162, 48);
             this.btnAdd.TabIndex = 1;
+            this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = false;
             this.btnAdd.Click += new System.EventHandler(this.addButton_Click);
-            // 
-            // addLabel
-            // 
-            this.addLabel.AutoSize = true;
-            this.addLabel.BackColor = System.Drawing.Color.DarkOliveGreen;
-            this.addLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addLabel.ForeColor = System.Drawing.Color.Transparent;
-            this.addLabel.Location = new System.Drawing.Point(71, 565);
-            this.addLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.addLabel.Name = "addLabel";
-            this.addLabel.Size = new System.Drawing.Size(41, 20);
-            this.addLabel.TabIndex = 2;
-            this.addLabel.Text = "Add";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.DarkOliveGreen;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(597, 565);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 20);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Remove";
             // 
             // btnRemove
             // 
             this.btnRemove.BackColor = System.Drawing.Color.DarkOliveGreen;
             this.btnRemove.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRemove.ForeColor = System.Drawing.SystemColors.Control;
             this.btnRemove.Location = new System.Drawing.Point(553, 551);
             this.btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(162, 48);
             this.btnRemove.TabIndex = 3;
+            this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = false;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // label2
             // 
@@ -166,23 +145,26 @@
             this.label2.BackColor = System.Drawing.Color.DarkOliveGreen;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(341, 565);
+            this.label2.Location = new System.Drawing.Point(422, 505);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 20);
+            this.label2.Size = new System.Drawing.Size(0, 20);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Edit";
             // 
             // btnEdit
             // 
             this.btnEdit.BackColor = System.Drawing.Color.DarkOliveGreen;
             this.btnEdit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnEdit.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEdit.ForeColor = System.Drawing.SystemColors.Control;
             this.btnEdit.Location = new System.Drawing.Point(283, 551);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(162, 48);
             this.btnEdit.TabIndex = 5;
+            this.btnEdit.Text = "Edit";
             this.btnEdit.UseVisualStyleBackColor = false;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // panel1
             // 
@@ -213,9 +195,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnEdit);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnRemove);
-            this.Controls.Add(this.addLabel);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.dgvEmployees);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -234,8 +214,6 @@
 
         private System.Windows.Forms.DataGridView dgvEmployees;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Label addLabel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnEdit;

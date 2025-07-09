@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics; 
 using DataGridSampleProject;
 
 namespace DataGridSampleProject
@@ -19,14 +20,18 @@ namespace DataGridSampleProject
 
             InitializeComponent();
 
-            /* ***********************
+            /**************************************************************
                Load is an event member of Form class.   
                Load event is fired when form is loaded into memory, 
                right before it is displayed for Ist time. 
 
                += : Subscription operator. When Load event occur, all 
                     the methods subscribed to it will be executed. 
-               ***********************/
+            ***************************************************************/
+
+            // Subscribing to Load is preferred instead of direct calls in the constructor of UI setup. 
+            // Because, it will ensure that any calls that needed strictly after the UI setup is completed, will
+            // be called after UI setup only, because Load will be fired after UI setup is done. 
             this.Load += MainForm_Load; 
         }
 
@@ -54,14 +59,62 @@ namespace DataGridSampleProject
 
         private void addButton_Click(object sender, EventArgs e)
         {
-
-            DetailsForm detailsForm = new DetailsForm();
-            detailsForm.Show();
-            this.Hide();
-            if (detailsForm.ShowDialog() == DialogResult.OK)
+            // This declaration will instantiate the object
+            using (DetailsForm detailsForm = new DetailsForm())
             {
-                this.Show();
-                LoadData();
+                // ShowDialog() will open form as a dialog box. 
+                // we can set the dialog result as OK in the end of Details form. 
+                if (detailsForm.ShowDialog() == DialogResult.OK)
+                {
+
+                    LoadData(); 
+                }
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+
+            if (dgvEmployees.CurrentRow == null)
+            {
+
+                MessageBox.Show("Please select a row. ");
+                return;
+            }
+
+            Employee employee = dgvEmployees.CurrentRow.Tag as Employee; 
+            using (DetailsForm detailsForm = new DetailsForm(true, employee))
+            {
+
+                if (detailsForm.ShowDialog() == DialogResult.OK)
+                {
+
+                    LoadData(); 
+                }
+            }
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (dgvEmployees.CurrentRow == null)
+            {
+
+                MessageBox.Show("Please select a row. ");
+                return;
+            }
+
+            // FIXME: Confirmation message before deleting
+
+            Employee employee = dgvEmployees.CurrentRow.Tag as Employee;
+            bool status = Utils.DeleteEmployee(AppConstants.XmlFilePath, employee.Id);
+            if (!status)
+            {
+
+                Trace.WriteLine($"[MainForm.cs] [MainForm] btnRemove_Click(); Utils.DeleteEmployee() failed. ");
+            }
+            else
+            {
+                LoadData(); 
             }
         }
     }
