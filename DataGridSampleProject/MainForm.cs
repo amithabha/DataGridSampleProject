@@ -46,10 +46,19 @@ namespace DataGridSampleProject
         /// <summary>
         /// Load data from xml file and bind data to DataGridView table 
         /// </summary>
-        private void LoadData()
+        private void LoadData(List<Employee> employeeListArg = null)
         {
 
-            List<Employee> employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
+            List<Employee> employees; 
+            if (employeeListArg == null)
+            {
+
+                employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
+            }
+            else
+            {
+                employees = employeeListArg; 
+            }
 
             // Autosizing stuffs
             dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells; 
@@ -121,6 +130,14 @@ namespace DataGridSampleProject
             {
                 LoadData(); 
             }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+
+            List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
+            List<Employee> newEmployeeList = employeeList.Where(p => p.ToString().Contains(txtSearch.Text)).ToList();
+            LoadData(newEmployeeList); 
         }
     }
 }

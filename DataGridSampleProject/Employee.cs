@@ -14,7 +14,7 @@ namespace DataGridSampleProject
         /// <summary>
         /// Parameterless Construction for XML serialization 
         /// </summary>
-        public Employee() {}
+        public Employee() { }
 
         public Employee(int id, string name, string designation, string emailId,
         string reporter, string reportee, string productLineResponsibility, int workExperience)
@@ -27,6 +27,28 @@ namespace DataGridSampleProject
             Reportee = reportee;
             ProductLineResponsibility = productLineResponsibility;
             WorkExperience = workExperience;
+        }
+
+        public override string ToString()
+        {
+            return string.Concat
+            (
+                Id.ToString(), 
+                "__",
+                Name,
+                "__",
+                Designation,
+                "__",
+                EmailId,
+                "__",
+                Reporter,
+                "__",
+                Reportee,
+                "__",
+                ProductLineResponsibility,
+                "__",
+                WorkExperience
+            ); 
         }
     }
 }
