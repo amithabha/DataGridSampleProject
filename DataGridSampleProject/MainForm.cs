@@ -15,6 +15,8 @@ namespace DataGridSampleProject
     public partial class MainForm : Form
     {
 
+        private string _searchString = String.Empty; 
+
         public MainForm()
         {
 
@@ -32,7 +34,7 @@ namespace DataGridSampleProject
             // Subscribing to Load is preferred instead of direct calls in the constructor of UI setup. 
             // Because, it will ensure that any calls that needed strictly after the UI setup is completed, will
             // be called after UI setup only, because Load will be fired after UI setup is done. 
-            this.Load += MainForm_Load; 
+            this.Load += MainForm_Load;
         }
 
         /// <param name="sender"></param>
@@ -45,19 +47,18 @@ namespace DataGridSampleProject
 
         /// <summary>
         /// Load data from xml file and bind data to DataGridView table 
+        /// LoadData is run only by add, edit, delete and search functions in MainForm. 
         /// </summary>
-        private void LoadData(List<Employee> employeeListArg = null)
+        private void LoadData()
         {
 
-            List<Employee> employees; 
-            if (employeeListArg == null)
+            List<Employee> employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
+
+            // Search Functionality
+            if (!String.IsNullOrEmpty(_searchString))
             {
 
-                employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
-            }
-            else
-            {
-                employees = employeeListArg; 
+                employees = employees.Where(p => p.ToString().Contains(_searchString)).ToList();                                                    
             }
 
             // Autosizing stuffs
@@ -135,9 +136,19 @@ namespace DataGridSampleProject
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
 
-            List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
-            List<Employee> newEmployeeList = employeeList.Where(p => p.ToString().Contains(txtSearch.Text)).ToList();
-            LoadData(newEmployeeList); 
+            if (String.IsNullOrEmpty(txtSearch.Text))
+            {
+                _searchString = String.Empty;
+            }
+            else
+            {
+                _searchString = txtSearch.Text; 
+            }
+
+            // List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
+                // List<Employee> newEmployeeList = employeeList.Where(p => p.ToString().Contains(txtSearch.Text)).ToList();
+                // LoadData(newEmployeeList); 
+                LoadData(); 
         }
     }
 }
