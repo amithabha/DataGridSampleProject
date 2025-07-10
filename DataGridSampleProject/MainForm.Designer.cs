@@ -36,8 +36,9 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.txtSearch = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblRecordCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEmployees)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -115,6 +116,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.lblRecordCount);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -148,6 +150,14 @@
             this.panel2.Size = new System.Drawing.Size(1243, 128);
             this.panel2.TabIndex = 8;
             // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(831, 57);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(240, 26);
+            this.txtSearch.TabIndex = 8;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -158,13 +168,16 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Search";
             // 
-            // txtSearch
+            // lblRecordCount
             // 
-            this.txtSearch.Location = new System.Drawing.Point(831, 57);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(240, 26);
-            this.txtSearch.TabIndex = 8;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.lblRecordCount.AutoSize = true;
+            this.lblRecordCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRecordCount.ForeColor = System.Drawing.Color.DarkGreen;
+            this.lblRecordCount.Location = new System.Drawing.Point(101, 24);
+            this.lblRecordCount.Name = "lblRecordCount";
+            this.lblRecordCount.Size = new System.Drawing.Size(160, 25);
+            this.lblRecordCount.TabIndex = 1;
+            this.lblRecordCount.Text = "lblRecordCount";
             // 
             // MainForm
             // 
@@ -200,6 +213,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblRecordCount;
     }
 }
 

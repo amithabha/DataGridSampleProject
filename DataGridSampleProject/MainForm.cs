@@ -15,7 +15,7 @@ namespace DataGridSampleProject
     public partial class MainForm : Form
     {
 
-        private string _searchString = String.Empty; 
+        private string _searchString = String.Empty;
 
         public MainForm()
         {
@@ -42,7 +42,7 @@ namespace DataGridSampleProject
         private void MainForm_Load(object sender, EventArgs e)
         {
 
-            LoadData(); 
+            LoadData();
         }
 
         /// <summary>
@@ -58,18 +58,21 @@ namespace DataGridSampleProject
             if (!String.IsNullOrEmpty(_searchString))
             {
 
-                employees = employees.Where(p => p.ToString().Contains(_searchString)).ToList();                                                    
+                employees = employees.Where(p => p.ToString().Contains(_searchString)).ToList();
             }
 
             // Autosizing stuffs
-            dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells; 
-            dgvEmployees.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells; 
-            dgvEmployees.DefaultCellStyle.WrapMode = DataGridViewTriState.True; 
+            dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvEmployees.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvEmployees.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
             // Binding Source: used to decouple table from data. Don't know why. 
             BindingSource bindingSource = new BindingSource();
             bindingSource.DataSource = employees;
-            dgvEmployees.DataSource = bindingSource; 
+            dgvEmployees.DataSource = bindingSource;
+
+            // Display the no of records
+            UpdateRecordCount(); 
         }
 
         private void addButton_Click(object sender, EventArgs e)
@@ -82,7 +85,7 @@ namespace DataGridSampleProject
                 if (detailsForm.ShowDialog() == DialogResult.OK)
                 {
 
-                    LoadData(); 
+                    LoadData();
                 }
             }
         }
@@ -97,14 +100,14 @@ namespace DataGridSampleProject
                 return;
             }
 
-            Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee; 
+            Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee;
             using (DetailsForm detailsForm = new DetailsForm(true, employee))
             {
 
                 if (detailsForm.ShowDialog() == DialogResult.OK)
                 {
 
-                    LoadData(); 
+                    LoadData();
                 }
             }
         }
@@ -129,7 +132,7 @@ namespace DataGridSampleProject
             }
             else
             {
-                LoadData(); 
+                LoadData();
             }
         }
 
@@ -142,13 +145,19 @@ namespace DataGridSampleProject
             }
             else
             {
-                _searchString = txtSearch.Text; 
+                _searchString = txtSearch.Text;
             }
 
             // List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
-                // List<Employee> newEmployeeList = employeeList.Where(p => p.ToString().Contains(txtSearch.Text)).ToList();
-                // LoadData(newEmployeeList); 
-                LoadData(); 
+            // List<Employee> newEmployeeList = employeeList.Where(p => p.ToString().Contains(txtSearch.Text)).ToList();
+            // LoadData(newEmployeeList); 
+            LoadData();
+        }
+
+        private void UpdateRecordCount()
+        {
+
+            lblRecordCount.Text = $"Employee Count: {dgvEmployees.Rows.Count}"; 
         }
     }
 }

@@ -49,7 +49,7 @@ namespace DataGridSampleProject
         private void submit_Click(object sender, EventArgs e)
         {
 
-            bool validity = IsInputValid();
+            bool validity = IsInputValid(_editMode);
             if (!validity)
             {
 
@@ -120,7 +120,7 @@ namespace DataGridSampleProject
 
         }
 
-        private bool IsInputValid()
+        private bool IsInputValid(bool edit)
         {
             // Clear all errors
             errId.Clear();
@@ -149,7 +149,7 @@ namespace DataGridSampleProject
                 List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
                 int count = employeeList.Count(u => u.Id == int.Parse(txtId.Text));
 
-                if (count > 0)
+                if ( edit && (count > 1) || !edit && (count > 0) )
                 {
                     errId.SetError(txtId, "Employee with Id already exists. ");
                     IsValid = false; 
