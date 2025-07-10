@@ -58,7 +58,16 @@ namespace DataGridSampleProject
             if (!String.IsNullOrEmpty(_searchString))
             {
 
-                employees = employees.Where(p => p.ToString().Contains(_searchString)).ToList();
+                if (_searchString.ToLower() == _searchString)
+                {
+
+                    employees = employees.Where(p => p.ToString().ToLower().Contains(_searchString.ToLower())).ToList();
+                }
+                else
+                {
+
+                    employees = employees.Where(p => p.ToString().Contains(_searchString)).ToList();
+                }
             }
 
             // Autosizing stuffs
