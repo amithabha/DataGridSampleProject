@@ -143,6 +143,18 @@ namespace DataGridSampleProject
                 errId.SetError(txtId, "Id should be a non-negative integer. ");
                 IsValid = false;
             }
+            else
+            {
+
+                List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
+                int count = employeeList.Count(u => u.Id == int.Parse(txtId.Text));
+
+                if (count > 0)
+                {
+                    errId.SetError(txtId, "Employee with Id already exists. ");
+                    IsValid = false; 
+                }
+            }
 
             // Name validation
             if (String.IsNullOrWhiteSpace(txtName.Text))
