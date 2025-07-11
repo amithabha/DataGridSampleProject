@@ -171,6 +171,7 @@
             this.txtReportee.Name = "txtReportee";
             this.txtReportee.Size = new System.Drawing.Size(241, 26);
             this.txtReportee.TabIndex = 11;
+            this.txtReportee.Multiline = true; 
             // 
             // txtProductLineResponsibility
             // 

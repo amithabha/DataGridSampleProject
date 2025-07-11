@@ -15,6 +15,8 @@ namespace DataGridSampleProject
     public partial class MainForm : Form
     {
 
+        private string _searchString = String.Empty;
+
         public MainForm()
         {
 
@@ -32,7 +34,7 @@ namespace DataGridSampleProject
             // Subscribing to Load is preferred instead of direct calls in the constructor of UI setup. 
             // Because, it will ensure that any calls that needed strictly after the UI setup is completed, will
             // be called after UI setup only, because Load will be fired after UI setup is done. 
-            this.Load += MainForm_Load; 
+            this.Load += MainForm_Load;
         }
 
         /// <param name="sender"></param>
@@ -40,26 +42,46 @@ namespace DataGridSampleProject
         private void MainForm_Load(object sender, EventArgs e)
         {
 
-            LoadData(); 
+            LoadData();
         }
 
         /// <summary>
         /// Load data from xml file and bind data to DataGridView table 
+        /// LoadData is run only by add, edit, delete and search functions in MainForm. 
         /// </summary>
         private void LoadData()
         {
 
             List<Employee> employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
 
+            // Search Functionality
+            if (!String.IsNullOrEmpty(_searchString))
+            {
+
+                if (_searchString.ToLower() == _searchString)
+                {
+
+                    employees = employees.Where(p => p.ToString().ToLower().Contains(_searchString.ToLower())).ToList();
+                }
+                else
+                {
+
+                    employees = employees.Where(p => p.ToString().Contains(_searchString)).ToList();
+                }
+            }
+
             // Autosizing stuffs
-            dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells; 
-            dgvEmployees.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells; 
-            dgvEmployees.DefaultCellStyle.WrapMode = DataGridViewTriState.True; 
+            dgvEmployees.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvEmployees.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvEmployees.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
             // Binding Source: used to decouple table from data. Don't know why. 
             BindingSource bindingSource = new BindingSource();
             bindingSource.DataSource = employees;
-            dgvEmployees.DataSource = bindingSource; 
+            dgvEmployees.DataSource = bindingSource;
+
+            // Display the no of records
+            UpdateRecordCount(); 
         }
 
         private void addButton_Click(object sender, EventArgs e)
@@ -72,7 +94,7 @@ namespace DataGridSampleProject
                 if (detailsForm.ShowDialog() == DialogResult.OK)
                 {
 
-                    LoadData(); 
+                    LoadData();
                 }
             }
         }
@@ -87,14 +109,14 @@ namespace DataGridSampleProject
                 return;
             }
 
-            Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee; 
+            Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee;
             using (DetailsForm detailsForm = new DetailsForm(true, employee))
             {
 
                 if (detailsForm.ShowDialog() == DialogResult.OK)
                 {
 
-                    LoadData(); 
+                    LoadData();
                 }
             }
         }
@@ -119,8 +141,32 @@ namespace DataGridSampleProject
             }
             else
             {
-                LoadData(); 
+                LoadData();
             }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+
+            if (String.IsNullOrEmpty(txtSearch.Text))
+            {
+                _searchString = String.Empty;
+            }
+            else
+            {
+                _searchString = txtSearch.Text;
+            }
+
+            // List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
+            // List<Employee> newEmployeeList = employeeList.Where(p => p.ToString().Contains(txtSearch.Text)).ToList();
+            // LoadData(newEmployeeList); 
+            LoadData();
+        }
+
+        private void UpdateRecordCount()
+        {
+
+            lblRecordCount.Text = $"Employee Count: {dgvEmployees.Rows.Count}"; 
         }
     }
 }
