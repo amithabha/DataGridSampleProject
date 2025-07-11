@@ -21,4 +21,4 @@
 
 ### From Visual Studio
 * Visual Studio 2017 is used for development.
-* Not tested in latest Visual Studio
+* Not tested in latest Visual Studio environment
