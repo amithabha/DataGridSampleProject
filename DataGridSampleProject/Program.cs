@@ -1,4 +1,16 @@
-﻿using System;
+﻿/******************************************************************************
+* Filename    = Program.cs
+*
+* Author      = Amithabh A
+*
+* Product     = Main Program 
+* 
+* Project     = EmployeeDatabase
+*
+* Description = Start point of the application
+*****************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
