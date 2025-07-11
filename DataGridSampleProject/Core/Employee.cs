@@ -1,3 +1,15 @@
+/******************************************************************************
+* Filename    = Employee.cs
+*
+* Author      = Amithabh A
+*
+* Product     = Employee Class
+* 
+* Project     = EmployeeDatabase
+*
+* Description = Implements Employee class. 
+*****************************************************************************/
+
 namespace DataGridSampleProject
 {
     public class Employee

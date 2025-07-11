@@ -9,6 +9,7 @@
 *
 * Description = Implement Utility functions
 *****************************************************************************/
+
 using System;
 using System.IO;
 using System.Linq;
@@ -23,10 +24,10 @@ namespace DataGridSampleProject
     {
 
         /// <summary>
-        /// Load Employee list from storage xml file. File will be created if it does not exists. 
+        /// Load Employee list from xml file. File will be created if it does not exists. 
         /// </summary>
         /// <param name="filePath">Path of xml file</param>
-        /// <returns>List of Employees</returns>
+        /// <returns>List of employees</returns>
         public static List<Employee> LoadEmployees(string filePath)
         {
 
@@ -38,9 +39,10 @@ namespace DataGridSampleProject
                 return null;
             }
 
-            // If file does not exists, create one. 
+            // Create xml file if it does not exist. 
             if (!File.Exists(filePath))
             {
+
                 bool status = CreateFile(filePath); 
                 if (!status)
                 {
@@ -53,33 +55,40 @@ namespace DataGridSampleProject
 
             // Read file content. 
             string serializedXmlString = ReadFromFile(filePath, false);
+
+            // Return empty list if file content is null. 
             if (String.IsNullOrEmpty(serializedXmlString))
             {
-                return new List<Employee>(); 
+                return new List<Employee>();
             }
 
-            // Deserialize serialized string. If success, return employee list and if failed, return status error. 
+            // Deserialize serialized string. Return status failure if deserialization fails.  
             List<Employee> employeeList = DeserializeFromXml<List<Employee>>(serializedXmlString);
 
+            // if list is null, then content is not serialized employee list. 
             if (employeeList == null)
             {
 
                 Trace.WriteLine($"[Utils] LoadEmployees(); Xml file Deserialization failed: {nameof(DeserializeFromXml)}() returned null. ");
+                return null; 
             }
+            else
+            {
 
-            return employeeList; 
+                return employeeList; 
+            }
         }
 
         /// <summary>
-        /// Save an Employee list in a file
+        /// Save employee list to xml file
         /// </summary>
-        /// <param name="employeeList"></param>
-        /// <param name="filePath"></param>
-        /// <returns>execution status</returns> 
+        /// <param name="employeeList"> list to be saved </param>
+        /// <param name="filePath"> Path of xml file </param>
+        /// <returns> Saving status </returns> 
         public static bool SaveEmployees(List<Employee> employeeList, string filePath)
         {
 
-            // Check whether filepath is of an xml file
+            // Return status failure if path is not of xml file. 
             if (!Regex.IsMatch(filePath, @"\.xml$", RegexOptions.IgnoreCase))
             {
 
@@ -87,18 +96,17 @@ namespace DataGridSampleProject
                 return false; 
             }
 
-            // Serialize the contents. 
+            // Serialize employee list to xml.  
             string serializedXmlString = SerializeToXml<List<Employee>>(employeeList);
-
-            // If content is null, return false
             if (serializedXmlString == null)
             {
 
+                // Return status failure if serialized string is null. This is just debug helper
                 Trace.WriteLine($"[Utils] SaveEmployees(): SerializeToXml returned invalid data"); 
                 return false;
             }
 
-            // Overwrite the contents. 
+            // Overwrite serialized string in xml file. 
             try
             {
 
@@ -117,26 +125,19 @@ namespace DataGridSampleProject
         /// <summary>
         /// Add employee to the database 
         /// </summary>
-        /// <param name="employee">Employee object to be added</param>
-        /// <param name="filePath"></param>
-        /// <returns>status</returns>
+        /// <param name="employee"> Employee object to be added </param>
+        /// <param name="filePath"> Path of Xml file </param>
+        /// <returns> Employee record insertion status </returns>
         public static bool AddEmployee(Employee employee, string filePath)
         {
 
-            // Load employees. Return status error if loading fails. 
+            // Load employees. 
             List<Employee> employeeList = LoadEmployees(filePath);
-
-            // if (employeeList == null)
-            // {
-
-            //     Trace.WriteLine($"[Utils] AddEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
-            //     return false;
-            // }
 
             // Add employee to the list
             employeeList.Add(employee);
 
-            // Save employee list. Return status error when saving fails.  
+            // Save employee list. Return status failure if saving fails.   
             bool status = SaveEmployees(employeeList, filePath);
             if (!status)
             {
@@ -144,30 +145,26 @@ namespace DataGridSampleProject
                 Trace.WriteLine($"[Utils] AddEmployee(): {nameof(SaveEmployees)}() returned status error. ");
                 return false;
             }
+            else
+            {
 
-            // return status ok 
-            return true; 
+                return true; 
+            }
         }
 
         /// <summary>
-        /// Edit data of an employee in xml database. 
+        /// Edit employee record data
         /// </summary>
         /// <param name="updatedEmployee">Employee object containing updated data</param>
-        /// <param name="filePath"></param>
-        /// <returns>execution status</returns> 
+        /// <param name="filePath"> Path of xml file</param>
+        /// <returns> Employee record edit status </returns> 
         public static bool EditEmployee(Employee updatedEmployee, string filePath)
         {
 
-            // Load employee list. Return status error if employee list is null or empty.  
+            // Load employee list.   
             List<Employee> employeeList = LoadEmployees(filePath);
 
-            // if (employeeList == null)
-            // {
-
-            //     Trace.WriteLine($"[Utils] EditEmployee(): {nameof(LoadEmployees)} function has falied and returned null.");
-            //     return false;
-            // }
-            // else if (employeeList.Count == 0)
+            // Return failure status if no file is there to edit. 
             if (employeeList.Count == 0)
             {
 
@@ -175,7 +172,7 @@ namespace DataGridSampleProject
                 return false; 
             }
 
-            // Get employee record from employee list. Return status error if record not found. 
+            // Get employee record from employee list. Return status failure if record not found. 
             Employee employee = employeeList.FirstOrDefault(u => u.Id == updatedEmployee.Id);
 
             if (employee == null)
@@ -194,32 +191,34 @@ namespace DataGridSampleProject
             employee.ProductLineResponsibility = updatedEmployee.ProductLineResponsibility;
             employee.WorkExperience = updatedEmployee.WorkExperience; 
 
-            // Saving the data back to xml file. Return status error if saving failed. 
+            // Save the data. Return status failure if save fails. 
             bool status = SaveEmployees(employeeList, filePath);
             if (!status)
             {
 
-                Trace.WriteLine($"[Utils] EditEmployee(): {nameof(SaveEmployees)}() returned status error. "); 
-                return false; 
+                Trace.WriteLine($"[Utils] EditEmployee(): {nameof(SaveEmployees)}() returned status error. ");
+                return false;
             }
+            else
+            {
 
-            // Return status ok
-            return true; 
+                return true; 
+            }
         }
 
+        /// <summary>
+        /// Delete employee from employee list stored in Xml file
+        /// </summary>
+        /// <param name="filePath"> Filepath of xml database </param>
+        /// <param name="id"> Id of employee to be deleted </param>
+        /// <returns> Deletion status </returns>
         public static bool DeleteEmployee(string filePath, int id)
         {
 
             // Load employee list
             List<Employee> employeeList = LoadEmployees(filePath);
 
-            // if (employeeList == null)
-            // {
-
-            //     Trace.WriteLine($"[Utils] DeleteEmployee(); {nameof(LoadEmployees)}() malfunctioned and returned null. ");
-            //     return false;
-            // }
-            // else if (employeeList.Count == 0)
+            // return failure status if employee does not exists. 
             if (employeeList.Count == 0)
             {
 
@@ -230,31 +229,37 @@ namespace DataGridSampleProject
             // Remove record from employee list 
             int count = employeeList.RemoveAll(u => u.Id == id);
 
+            // Application malfunction conditions
             if (count != 1)
             {
                 if (count == 0)
                 {
+
                     Trace.WriteLine($"[Utils] DeleteEmployee(): Record with id {id} does not exist in the employee list. ");
                 }
                 else
                 {
+
                     Trace.WriteLine($"[Utils] DeleteEmployee(): Employee list contained duplicate entries. ");
                 }
                 return false;
             }
 
-            // Save back the data to xml database
+            // Save data to xml file and get save status
             bool status = SaveEmployees(employeeList, filePath);
 
+            // Return status failure if saving failed. 
             if (!status)
             {
 
                 Trace.WriteLine($"[Utils] DeleteEmployee(): {nameof(SaveEmployees)}() failed and returned status error. ");
                 return false;
             }
+            else
+            {
 
-            // return status OK
-            return true;
+                return true;
+            }
         }
 
 
@@ -307,14 +312,17 @@ namespace DataGridSampleProject
         private static T DeserializeFromXml<T>(string serializedXmlString)
         {
 
+            // Return default(T) if string is empty. 
             if (String.IsNullOrEmpty(serializedXmlString))
             {
+
                 Trace.WriteLine($"[Utils] DeserializeFromXml(): Argument is null or empty. ");
-                // return null;
                 return default(T); 
             }
             else
             {
+
+                // Deserialize string and return T object. 
                 try
                 {
 
@@ -342,6 +350,7 @@ namespace DataGridSampleProject
         /// <returns>File creation status</returns>
         private static bool CreateFile(string filePath)
         {
+
             // If file already exists, return status error
             if (File.Exists(filePath))
             {
@@ -350,8 +359,7 @@ namespace DataGridSampleProject
                 return false;
             }
 
-            // Create file. If creation fails, return status error. 
-            // FIXME: Advanced ErrorHandling: put the below line inside try catch
+            // Create file. Return status failure if file creation fails.  
             try
             {
 
@@ -361,16 +369,16 @@ namespace DataGridSampleProject
             catch
             {
 
-                Trace.WriteLine($"[Utils] CreateFile(): File creation failed. Please debug the code, error handling is poorly implemented in this function.");
+                Trace.WriteLine($"[Utils] CreateFile(): File creation failed. ");
                 return false; 
             }
         }
 
         /// <summary>
-        /// Read contents from a file
+        /// Read contents from file
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns>Content of file</returns>
+        /// <param name="filePath"> Path of file </param>
+        /// <returns>Contents of the file</returns>
         private static string ReadFromFile(string filePath, bool writeTrace = true)
         {
 
