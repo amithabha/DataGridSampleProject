@@ -7,3 +7,18 @@
 * Edit employee record
 * Delete employee record
 * Search across employee records
+
+## How to setup
+* Clone this repository to your local machine
+  ```bash
+  git clone git@github.com:amithabha/DataGridSampleProject.git
+  ```
+
+## How to run
+
+### Command Line
+* Currently cli execution is unavailable (due to either my lack of knowledge or non-support of cli running of application environment ). 
+
+### From Visual Studio
+* Visual Studio 2017 is used for development.
+* Not tested in latest Visual Studio
