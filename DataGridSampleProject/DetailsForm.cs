@@ -1,4 +1,16 @@
-﻿using System;
+﻿/******************************************************************************
+* Filename    = DetailsForm.cs
+*
+* Author      = Amithabh A
+*
+* Product     = Details Form 
+* 
+* Project     = EmployeeDatabase
+*
+* Description = Implements form where employee data is added / edited
+*****************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics; 
 using System.ComponentModel;
@@ -12,43 +24,65 @@ using System.Text.RegularExpressions;
 
 namespace DataGridSampleProject
 {
+
+    /// <summary>
+    /// Details Form implementation
+    /// <summary>
     public partial class DetailsForm : Form
     {
-        private Employee EditEmployee; 
+
+        private Employee _editEmployee;
         private bool _editMode;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="editMode"> Boolean value of edit status </param>
+        /// <param name="employee"> Employee to be edited </param>
         public DetailsForm(bool editMode = false, Employee employee = null)
         {
 
             _editMode = editMode;
 
+            // employee should not be null when editing
             if (_editMode)
             {
 
                 if (employee == null)
                 {
                     Trace.WriteLine($"[DetailsForm.cs] [DetailsForm] Constructor; Argument employee should not be null. ");
+                    return; 
                 }
 
-                EditEmployee = employee; 
+                _editEmployee = employee;
             }
 
 
             InitializeComponent();
-            this.Load += LoadDetails; 
+            // FIXME: Form title can be customised according to edit mode. 
+            this.Load += LoadDetails;
         }
 
+        /// <summary>
+        /// Form will be populated with details of employee to be edited, 
+        /// if forms is opened in edit mode. 
+        /// </summary>
         private void LoadDetails(object sender, EventArgs e)
         {
 
             if (_editMode)
             {
-                PopulateEditForm(EditEmployee); 
+                PopulateEditForm(_editEmployee);
             }
         }
 
+        /// <summary>
+        /// Event handler that handles submitted employee data
+        /// </summary>
         private void submit_Click(object sender, EventArgs e)
         {
 
+            // Check whether entered data is valid. 
             bool validity = IsInputValid(_editMode);
             if (!validity)
             {
@@ -57,8 +91,10 @@ namespace DataGridSampleProject
                 return;
             }
 
+            // Create employee object with valid data
             Employee employee = CreateEmployeeFromForm();
 
+            // Variable that records add/edit function status
             bool status;
 
             if (_editMode)
@@ -84,11 +120,16 @@ namespace DataGridSampleProject
             if (status)
             {
 
+                // Set to OK denoting success employee creation/edit
                 DialogResult = DialogResult.OK;
-                Close(); 
+                Close();
             }
         }
 
+        /// <summary>
+        /// Create employee object from data entered in the form
+        /// </summary>
+        /// <returns> Employee object with entered data </returns> 
         private Employee CreateEmployeeFromForm()
         {
             Employee employee = new Employee
@@ -97,31 +138,43 @@ namespace DataGridSampleProject
                                     txtName.Text,
                                     comboxDesignation.Text,
                                     txtEmail.Text,
-                                    txtReporter.Text, 
-                                    txtReportee.Text, 
-                                    txtProductLineResponsibility.Text, 
+                                    txtReporter.Text,
+                                    txtReportee.Text,
+                                    txtProductLineResponsibility.Text,
                                     int.Parse(txtWorkExperience.Text)
                                 );
-            return employee; 
+            return employee;
         }
 
 
+        /// <summary>
+        /// Populate edit form with employee details
+        /// </summary>
+        /// <param name="employee"> Employee object to be edited </param>
         private void PopulateEditForm(Employee employee)
         {
-            txtId.Text = employee.Id.ToString(); 
+
+            // Id is set to readonly mode
+            txtId.Text = employee.Id.ToString();
             txtId.ReadOnly = true;
+
             txtName.Text = employee.Name;
             comboxDesignation.SelectedItem = employee.Designation;
             txtEmail.Text = employee.EmailId;
             txtReporter.Text = employee.Reporter;
             txtReportee.Text = employee.Reportee;
             txtProductLineResponsibility.Text = employee.ProductLineResponsibility;
-            txtWorkExperience.Text = employee.WorkExperience.ToString(); 
-
+            txtWorkExperience.Text = employee.WorkExperience.ToString();
         }
 
+        /// <summary>
+        /// Check input validity and indicate errors if input is invalid. 
+        /// </summary>
+        /// <param name="edit"></param>
+        /// <returns></returns> 
         private bool IsInputValid(bool edit)
         {
+
             // Clear all errors
             errId.Clear();
             errName.Clear();
@@ -135,30 +188,37 @@ namespace DataGridSampleProject
             // Id validation
             if (String.IsNullOrWhiteSpace(txtId.Text))
             {
+
+                // Empty Id error
                 errId.SetError(txtId, "Id cannot be empty. ");
                 IsValid = false;
             }
             else if (!int.TryParse(txtId.Text, out int id) || id < 0)
             {
+
+                // Negative Id error
                 errId.SetError(txtId, "Id should be a non-negative integer. ");
                 IsValid = false;
             }
             else
             {
 
+                // Duplicate record exists error
                 List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
                 int count = employeeList.Count(u => u.Id == int.Parse(txtId.Text));
 
-                if ( edit && (count > 1) || !edit && (count > 0) )
+                if (edit && (count > 1) || !edit && (count > 0))
                 {
+
                     errId.SetError(txtId, "Employee with Id already exists. ");
-                    IsValid = false; 
+                    IsValid = false;
                 }
             }
 
             // Name validation
             if (String.IsNullOrWhiteSpace(txtName.Text))
             {
+
                 errName.SetError(txtName, "Name cannot be empty. ");
                 IsValid = false;
             }
@@ -166,204 +226,50 @@ namespace DataGridSampleProject
             // Designation validation
             if (comboxDesignation.SelectedItem == null || String.IsNullOrWhiteSpace(comboxDesignation.Text))
             {
-                errDesignation.SetError( comboxDesignation, "Designation cannot be empty. ");
+
+                errDesignation.SetError(comboxDesignation, "Designation cannot be empty. ");
                 IsValid = false;
             }
 
             // Email validation
             if (String.IsNullOrWhiteSpace(txtEmail.Text))
             {
-                errEmail.SetError( txtEmail, "Email cannot be empty. ");
+
+                // Empty email error
+                errEmail.SetError(txtEmail, "Email cannot be empty. ");
                 IsValid = false;
             }
             else if (!Regex.IsMatch(txtEmail.Text, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                errEmail.SetError( txtEmail, "Email format is incorrect. ");
+
+                // Invalid email format error
+                errEmail.SetError(txtEmail, "Email format is incorrect. ");
                 IsValid = false;
             }
 
             // ProductLineResponsibility validation
             if (String.IsNullOrWhiteSpace(txtProductLineResponsibility.Text))
             {
+
                 errProdLineResp.SetError(txtProductLineResponsibility, "ProductLineResponsibility cannot be empty. ");
                 IsValid = false;
             }
 
             if (String.IsNullOrWhiteSpace(txtWorkExperience.Text))
             {
-                errorWorkExperience.SetError( txtWorkExperience, "Work Experience cannot be empty. ");
+
+                errorWorkExperience.SetError(txtWorkExperience, "Work Experience cannot be empty. ");
                 IsValid = false;
             }
             else if (!int.TryParse(txtWorkExperience.Text, out int id) || id < 0)
             {
-                errorWorkExperience.SetError( txtWorkExperience, "Work Experience should be non negative integer. ");
+
+                // Negative work experience error
+                errorWorkExperience.SetError(txtWorkExperience, "Work Experience should be non negative integer. ");
                 IsValid = false;
             }
 
-            return IsValid; 
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private void ErrorHandler()
-        {
-
-            // ErrorProvider list
-            List<ErrorProvider> errorProviders = new List<ErrorProvider>
-            {
-                errId, errName, errEmail, errReporter, errReportee,
-                errProdLineResp, errorWorkExperience
-            };
-
-            // TextBox list
-            List<TextBox> textBoxes = new List<TextBox>
-            {
-                txtId, txtName, txtEmail, txtReporter, txtReportee,
-                txtProductLineResponsibility, txtWorkExperience
-            };
-
-            // TextBox names
-            List<string> TextBoxtitles = new List<string>
-            {
-                "Id", "Name", "Email Id", "Reporter", "Reportee", "Product Line Responsibility", "Work Experience"
-            };
-
-            // ComboBoxes
-            List<ComboBox> comboBoxes = new List<ComboBox>
-            {
-                comboxDesignation
-            };
-
-            // ComboBoxNames
-            List<string> comboBoxTitles = new List<string>
-            {
-                "Designation"
-            };
-
-            // Setting error for empty ComboBoxes
-            ErrorAssigner(comboxDesignation, errDesignation, "Designation");
-
-            // Setting error for empty TextBoxes
-            for (int i = 0; i < textBoxes.Count; i++)
-            {
-                ErrorAssigner(textBoxes[i], errorProviders[i], TextBoxtitles[i]);
-            }
-
-            // Assigning error for non-integer WorkExperience text.  
-            if (!IsEmptyOrNullOrWhiteSpace(txtWorkExperience) && !int.TryParse(txtWorkExperience.Text, out _))
-            {
-                errorWorkExperience.SetError(txtWorkExperience, $"Work Experience should be integer");
-            }
-
-            // Assigning error for non-integer Id text.  
-            int result;
-
-            if (!IsEmptyOrNullOrWhiteSpace(txtId) && !int.TryParse(txtId.Text, out _))
-            {
-                errId.SetError(txtId, $"Id should be a non negative integer");
-            }
-            else if (!IsEmptyOrNullOrWhiteSpace(txtId) && int.TryParse(txtId.Text, out result))
-            {
-                if (result < 0)
-                {
-                    errId.SetError(txtId, $"Id should be non negative integer");
-                }
-            }
-
-            // FIXME: Check whether email entered is in correct format. 
-        }
-
-        /// <summary>
-        /// Checking whether textbox is empty or null or contains only whitespace
-        /// </summary>
-        /// <param name="textBox">TextBox object</param>
-        /// <returns>boolean val of error status</returns>
-        private bool IsEmptyOrNullOrWhiteSpace(TextBox textBox)
-        {
-
-            if (string.IsNullOrEmpty(textBox.Text) | string.IsNullOrWhiteSpace(textBox.Text))
-            {
-                return true; 
-            }
-
-            return false; 
-        }
-
-        /// <summary>
-        /// Checking whether combobox is empty or null or contains only whitespace
-        /// </summary>
-        /// <param name="textBox">TextBox object</param>
-        /// <returns>boolean val of error status</returns>
-        private bool IsEmptyOrNullOrWhiteSpace(ComboBox comboBox)
-        {
-
-            if (string.IsNullOrEmpty(comboBox.Text) | string.IsNullOrWhiteSpace(comboBox.Text))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Set or unset error for TextBox
-        /// </summary>
-        /// <param name="textBox">TextBox object</param>
-        /// <param name="errorProvider">ErrorProvider object</param>
-        /// <param name="name">Name of TextBox</param>
-        private void ErrorAssigner(TextBox textBox, ErrorProvider errorProvider, string name)
-        {
-
-            if (IsEmptyOrNullOrWhiteSpace(textBox))
-            {
-                errorProvider.SetError(textBox, $"{name} should not be empty"); 
-            } else
-            {
-                errorProvider.Clear(); 
-            }
-        }
-
-
-        /// <summary>
-        /// Set or unset error for ComboBox
-        /// </summary>
-        /// <param name="textBox">ComboBox object</param>
-        /// <param name="errorProvider">ErrorProvider object</param>
-        /// <param name="name">Name of ComboBox</param>
-        private void ErrorAssigner(ComboBox comboBox, ErrorProvider errorProvider, string name)
-        {
-
-            if (IsEmptyOrNullOrWhiteSpace(comboBox))
-            {
-                errorProvider.SetError(comboBox, $"{name} should not be empty");
-            }
-            else
-            {
-                errorProvider.Clear();
-            }
-        }
-
-        private void txtName_TextChanged(object sender, EventArgs e)
-        {
-
+            return IsValid;
         }
     }
 }

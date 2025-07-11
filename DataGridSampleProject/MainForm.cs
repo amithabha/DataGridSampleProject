@@ -1,3 +1,15 @@
+/******************************************************************************
+* Filename    = MainForm.cs
+*
+* Author      = Amithabh A
+*
+* Product     = Main Form 
+* 
+* Project     = EmployeeDatabase
+*
+* Description = Implements form that displays employee records
+*****************************************************************************/
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,37 +20,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics; 
-using DataGridSampleProject;
 
 namespace DataGridSampleProject
 {
+
+    /// <summary>
+    /// Main Form implementation
+    /// </summary> 
     public partial class MainForm : Form
     {
 
         private string _searchString = String.Empty;
 
+        /// <summary>
+        /// Constructor
+        /// <summary>
         public MainForm()
         {
 
+            // Load UI. Then load data. 
             InitializeComponent();
-
-            /**************************************************************
-               Load is an event member of Form class.   
-               Load event is fired when form is loaded into memory, 
-               right before it is displayed for Ist time. 
-
-               += : Subscription operator. When Load event occur, all 
-                    the methods subscribed to it will be executed. 
-            ***************************************************************/
-
-            // Subscribing to Load is preferred instead of direct calls in the constructor of UI setup. 
-            // Because, it will ensure that any calls that needed strictly after the UI setup is completed, will
-            // be called after UI setup only, because Load will be fired after UI setup is done. 
             this.Load += MainForm_Load;
         }
 
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <summary>
+        /// Event Handler that runs LoadData() after UI is loaded
+        /// </summary>
         private void MainForm_Load(object sender, EventArgs e)
         {
 
@@ -46,15 +53,15 @@ namespace DataGridSampleProject
         }
 
         /// <summary>
-        /// Load data from xml file and bind data to DataGridView table 
-        /// LoadData is run only by add, edit, delete and search functions in MainForm. 
+        /// Loads employee data from XmlFile to UI. 
+        /// If `_searchString` is not empty, employee data containing _searchString content only will be showed. 
         /// </summary>
         private void LoadData()
         {
 
             List<Employee> employees = Utils.LoadEmployees(AppConstants.XmlFilePath);
 
-            // Search Functionality
+            // Search Functionality implementation
             if (!String.IsNullOrEmpty(_searchString))
             {
 
@@ -81,11 +88,15 @@ namespace DataGridSampleProject
             dgvEmployees.DataSource = bindingSource;
 
             // Display the no of records
-            UpdateRecordCount(); 
+            UpdateRecordCount();
         }
 
+        /// <summary>
+        /// Event handler that handle logic of adding employee record
+        /// </summary>
         private void addButton_Click(object sender, EventArgs e)
         {
+
             // This declaration will instantiate the object
             using (DetailsForm detailsForm = new DetailsForm())
             {
@@ -94,14 +105,19 @@ namespace DataGridSampleProject
                 if (detailsForm.ShowDialog() == DialogResult.OK)
                 {
 
+                    // Reload data after successful employee addition
                     LoadData();
                 }
             }
         }
 
+        /// <summary>
+        /// Event handler that handle logic of editing employee record
+        /// </summary>
         private void btnEdit_Click(object sender, EventArgs e)
         {
 
+            // A row should be highlighted to edit. 
             if (dgvEmployees.CurrentRow == null)
             {
 
@@ -109,20 +125,30 @@ namespace DataGridSampleProject
                 return;
             }
 
+            // Get highlighted emploee record
             Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee;
+
+            // Open details form, passing employee record, in edit mode. 
             using (DetailsForm detailsForm = new DetailsForm(true, employee))
             {
 
                 if (detailsForm.ShowDialog() == DialogResult.OK)
                 {
 
+                    // Reload data after successful edit. 
                     LoadData();
                 }
             }
         }
 
+
+        /// <summary>
+        /// Event handler that handle logic of removing employee record
+        /// </summary>
         private void btnRemove_Click(object sender, EventArgs e)
         {
+
+            // A row should be highlighted to delete. 
             if (dgvEmployees.CurrentRow == null)
             {
 
@@ -132,7 +158,10 @@ namespace DataGridSampleProject
 
             // FIXME: Confirmation message before deleting
 
+            // Get highlighted employee as Employee object
             Employee employee = dgvEmployees.CurrentRow.DataBoundItem as Employee;
+
+            // status variable to check delete status
             bool status = Utils.DeleteEmployee(AppConstants.XmlFilePath, employee.Id);
             if (!status)
             {
@@ -141,10 +170,14 @@ namespace DataGridSampleProject
             }
             else
             {
+
                 LoadData();
             }
         }
 
+        /// <summary>
+        /// Set `_searchString` if text in search bar is changed, and reload data. 
+        /// </summary>
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
 
@@ -157,16 +190,16 @@ namespace DataGridSampleProject
                 _searchString = txtSearch.Text;
             }
 
-            // List<Employee> employeeList = Utils.LoadEmployees(AppConstants.XmlFilePath);
-            // List<Employee> newEmployeeList = employeeList.Where(p => p.ToString().Contains(txtSearch.Text)).ToList();
-            // LoadData(newEmployeeList); 
             LoadData();
         }
 
+        /// <summary>
+        /// Update record count when called. 
+        /// </summary>
         private void UpdateRecordCount()
         {
 
-            lblRecordCount.Text = $"Employee Count: {dgvEmployees.Rows.Count}"; 
+            lblRecordCount.Text = $"Employee Count: {dgvEmployees.Rows.Count}";
         }
     }
 }
